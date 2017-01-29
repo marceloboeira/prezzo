@@ -1,5 +1,5 @@
 require "prezzo/version"
 
 module Prezzo
-  # Your code goes here...
+  autoload :Calculator, "prezzo/calculator"
 end
