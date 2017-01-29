@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Prezzo::VERSION
   spec.authors       = ["Marcelo Boeira"]
   spec.email         = ["me@marceloboeira.com"]
-  spec.summary       = %q{Complex pricing models}
-  spec.description   = %q{Complex pricing models}
+  spec.summary       = %q{Toolbox to create complex pricing models}
+  spec.description   = %q{Toolbox to create complex pricing models}
   spec.homepage      = "http://github.com/marceloboeira/prezzo"
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})

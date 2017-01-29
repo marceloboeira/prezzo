@@ -1,5 +1,5 @@
 # Prezzo
-> Coming soon
+> Toolbox to create complex pricing models
 
 ## Installation
 
@@ -18,7 +18,23 @@ Or install it yourself as:
     $ gem install prezzo
 
 ## Usage
-> Coming soon
+
+### Basic:
+
+```ruby
+require "prezzo"
+
+class MyCalculator < Prezzo::Calculator
+  def calculate
+    context.fetch(:foo) * 2
+  end
+end
+
+MyCalculator.new(foo: 10).calculate
+#=> 20.0
+```
+
+Check the [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
 
 ## Development
 
