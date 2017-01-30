@@ -1,4 +1,4 @@
-# Prezzo
+# Prezzo [![Build Status](https://travis-ci.org/marceloboeira/prezzo.svg?branch=master)](https://travis-ci.org/marceloboeira/prezzo)
 > Toolbox to create complex pricing models
 
 ## Installation
