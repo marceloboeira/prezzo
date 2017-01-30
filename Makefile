@@ -5,6 +5,10 @@ default: setup
 setup:
 	bin/setup
 
+.PHONY: console
+console:
+	bin/console
+
 .PHONY: spec
 spec:
 	bundle exec rspec
@@ -19,3 +23,11 @@ report_coverage:
 .PHONY: guard
 guard:
 	bundle exec guard
+
+.PHONY: install
+install:
+	bundle exec rake install
+
+.PHONY: release
+release:
+	bundle exec rake release
