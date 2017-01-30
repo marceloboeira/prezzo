@@ -30,7 +30,7 @@ class MyCalculator < Prezzo::Calculator
   end
 end
 
-MyCalculator.new(foo: 10).calculate
+MyCalculator.new(foo: 10.0).calculate
 #=> 20.0
 ```
 
