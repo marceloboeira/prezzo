@@ -44,4 +44,6 @@ To install this gem onto your local machine, run `make install`. To release a ne
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/marceloboeira/prezzo. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Please consider reading out [Contributing Guide](CONTRIBUTING.md).
+
+This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
