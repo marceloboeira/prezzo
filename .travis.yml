@@ -2,4 +2,19 @@ sudo: false
 language: ruby
 rvm:
   - 2.3.1
-before_install: gem install bundler -v 1.13.7
+
+addons:
+  code_climate:
+    repo_token: b05bb78bfd6dbb9fb7f55d520f63e7d981f13a69de06aa2ae5ebd69a1e01789e
+
+before_install:
+  - gem install bundler -v 1.13.7
+
+install:
+  - make
+
+script:
+  - make test
+
+after_success:
+  - make report_coverage
