@@ -60,9 +60,11 @@ RSpec.describe "Uber Pricing" do
     }
   end
   let(:calculators) do
-    [ Uber::BaseFareCalculator.new(ride_context),
+    [
+      Uber::BaseFareCalculator.new(ride_context),
       Uber::PricePerDistanceCalculator.new(ride_context),
-      Uber::AdditionalPerDemandCalculator.new(ride_context) ]
+      Uber::AdditionalPerDemandCalculator.new(ride_context),
+    ]
   end
   let(:price) do
     calculators.map(&:calculate).reduce(:+)

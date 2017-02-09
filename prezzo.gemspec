@@ -1,15 +1,15 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'prezzo/version'
+require "prezzo/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "prezzo"
   spec.version       = Prezzo::VERSION
   spec.authors       = ["Marcelo Boeira"]
   spec.email         = ["me@marceloboeira.com"]
-  spec.summary       = %q{Toolbox to create complex pricing models}
-  spec.description   = %q{Toolbox to create complex pricing models}
+  spec.summary       = "Toolbox to create complex pricing models"
+  spec.description   = "Toolbox to create complex pricing models"
   spec.homepage      = "http://github.com/marceloboeira/prezzo"
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
