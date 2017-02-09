@@ -7,7 +7,8 @@ describe Prezzo::Calculator do
 
       context "and the calculate is not implemented" do
         before do
-          class FooCalculator < Prezzo::Calculator
+          class FooCalculator
+            include Prezzo::Calculator
           end
         end
 
@@ -20,7 +21,9 @@ describe Prezzo::Calculator do
         context "when there are context options" do
           context "and the options are provided" do
             before do
-              class FooCalculator < Prezzo::Calculator
+              class FooCalculator
+                include Prezzo::Calculator
+
                 def calculate
                   5 * context.fetch(:bar)
                 end
@@ -36,7 +39,9 @@ describe Prezzo::Calculator do
 
           context "and the options are not provided properly" do
             before do
-              class FooCalculator < Prezzo::Calculator
+              class FooCalculator
+                include Prezzo::Calculator
+
                 def calculate
                   5 * context.fetch(:bar)
                 end
@@ -46,16 +51,16 @@ describe Prezzo::Calculator do
             let(:calculator) { FooCalculator.new(nope: 10) }
 
             it "raises a KeyError" do
-              expect {
-                calculator.calculate
-              }.to raise_error(KeyError)
+              expect { calculator.calculate }.to raise_error(KeyError)
             end
           end
         end
 
         context "when there are not context options" do
           before do
-            class FooCalculator < Prezzo::Calculator
+            class FooCalculator
+              include Prezzo::Calculator
+
               def calculate
                 10
               end

@@ -1,5 +1,5 @@
 module Prezzo
-  class Calculator
+  module Calculator
     def initialize(context = {})
       @context = context
     end

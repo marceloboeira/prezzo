@@ -24,7 +24,9 @@ Or install it yourself as:
 ```ruby
 require "prezzo"
 
-class MyCalculator < Prezzo::Calculator
+class MyCalculator
+  include Prezzo::Calculator
+
   def calculate
     context.fetch(:foo) * 2
   end

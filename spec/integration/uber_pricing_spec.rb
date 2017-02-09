@@ -1,7 +1,9 @@
 require "spec_helper"
 
 module Uber
-  class BaseFareCalculator < Prezzo::Calculator
+  class BaseFareCalculator
+    include Prezzo::Calculator
+
     def calculate
       price_for(category) || 0
     end
@@ -17,7 +19,9 @@ module Uber
     end
   end
 
-  class PricePerDistanceCalculator < Prezzo::Calculator
+  class PricePerDistanceCalculator
+    include Prezzo::Calculator
+
     def calculate
       price_per_kilometer * distance
     end
@@ -31,7 +35,9 @@ module Uber
     end
   end
 
-  class AdditionalPerDemandCalculator < Prezzo::Calculator
+  class AdditionalPerDemandCalculator
+    include Prezzo::Calculator
+
     def calculate
       total_cars = context.fetch(:total_cars)
       available_cars = context.fetch(:available_cars)
