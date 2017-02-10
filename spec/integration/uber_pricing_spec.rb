@@ -1,6 +1,12 @@
 require "spec_helper"
 
 module Uber
+  PRICE_PER_CATEGORY = {
+    "UberX" => 4.0,
+    "UberXL" => 6.0,
+    "UberBLACK" => 8.0,
+  }.freeze
+
   class BaseFareCalculator
     include Prezzo::Calculator
 
@@ -13,9 +19,7 @@ module Uber
     end
 
     def price_for(category)
-      { "UberX" => 4.0,
-        "UberXL" => 6.0,
-        "UberBLACK" => 8.0 }[category]
+      PRICE_PER_CATEGORY[category]
     end
   end
 
