@@ -1,55 +1,5 @@
 require "spec_helper"
-
-module Uber
-  PRICE_PER_CATEGORY = {
-    "UberX" => 4.0,
-    "UberXL" => 6.0,
-    "UberBLACK" => 8.0,
-  }.freeze
-
-  class BaseFareCalculator
-    include Prezzo::Calculator
-
-    def calculate
-      price_for(category) || 0
-    end
-
-    def category
-      context.fetch(:category)
-    end
-
-    def price_for(category)
-      PRICE_PER_CATEGORY[category]
-    end
-  end
-
-  class PricePerDistanceCalculator
-    include Prezzo::Calculator
-
-    def calculate
-      price_per_kilometer * distance
-    end
-
-    def price_per_kilometer
-      1.30
-    end
-
-    def distance
-      context.fetch(:distance)
-    end
-  end
-
-  class AdditionalPerDemandCalculator
-    include Prezzo::Calculator
-
-    def calculate
-      total_cars = context.fetch(:total_cars)
-      available_cars = context.fetch(:available_cars)
-
-      50 * (1 - Math::log(available_cars, total_cars))
-    end
-  end
-end
+require "models/uber"
 
 RSpec.describe "Uber Pricing" do
   let(:distance) { 10.0 }
@@ -63,16 +13,8 @@ RSpec.describe "Uber Pricing" do
       available_cars: available_cars,
     }
   end
-  let(:calculators) do
-    [
-      Uber::BaseFareCalculator.new(ride_context),
-      Uber::PricePerDistanceCalculator.new(ride_context),
-      Uber::AdditionalPerDemandCalculator.new(ride_context),
-    ]
-  end
-  let(:price) do
-    calculators.map(&:calculate).reduce(:+)
-  end
+  let(:calculator) { Uber::RidePriceCalculator.new(ride_context) }
+  let(:price) { calculator.calculate }
 
   context "when the category is UberX" do
     context "and there is no distance" do

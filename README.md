@@ -19,24 +19,66 @@ Or install it yourself as:
 
 ## Usage
 
-### Basic:
+### Prezzo::Calculator
+
+The `Prezzo::Calculator` is a simple interface for injecting dependencies on your calculators and calculating the price. Basically, it makes it possible to receive the context, an Hash of parameters containing the necessary information to calculate your price.
+
+e.g.:
 
 ```ruby
 require "prezzo"
 
-class MyCalculator
-  include Prezzo::Calculator
+module Uber
+  class PricePerDistanceCalculator
+    include Prezzo::Calculator
 
-  def calculate
-    context.fetch(:foo) * 2
+    def calculate
+      price_per_kilometer * distance
+    end
+
+    def price_per_kilometer
+      1.30
+    end
+
+    def distance
+      context.fetch(:distance)
+    end
   end
 end
 
-MyCalculator.new(foo: 10.0).calculate
+Uber::PricePerDistanceCalculator.new(distance: 10.0).calculate
 #=> 20.0
 ```
 
-Check the [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
+### Prezzo::Composed
+
+The `Prezzo::Composed` module is an abstraction that provides a nice way of injecting other calculators define how the price will be composed with all of those calculators.
+
+e.g.:
+
+```ruby
+require "prezzo"
+
+module Uber
+  class RidePriceCalculator
+    include Prezzo::Calculator
+    include Prezzo::Composed
+
+    composed_by base_fare: BaseFareCalculator,
+                price_per_distance: PricePerDistanceCalculator,
+                additional_per_demand: AdditionalPerDemandCalculator
+
+    def calculate
+      base_fare + price_per_distance + additional_per_demand
+    end
+  end
+end
+
+Uber::RidePriceCalculator.new(distance: 10.0, category: "UberBlack", ...).calculate
+#=> 47.3
+```
+
+Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
 
 ## Development
 
