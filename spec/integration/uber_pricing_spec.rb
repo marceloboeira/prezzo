@@ -45,7 +45,7 @@ RSpec.describe "Uber Pricing" do
           let(:available_cars) { 40 }
 
           it "adds the additional per demand" do
-            expect(price.round(2)).to be(30.85)
+            expect(price.round(2)).to be(25.06)
           end
         end
       end

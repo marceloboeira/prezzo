@@ -5,10 +5,10 @@ module Uber
 
     composed_by base_fare: BaseFareCalculator,
                 price_per_distance: PricePerDistanceCalculator,
-                additional_per_demand: AdditionalPerDemandCalculator
+                surge_multiplier: SurgeMultiplierCalculator
 
     def calculate
-      base_fare + price_per_distance + additional_per_demand
+      (base_fare + price_per_distance) * surge_multiplier
     end
   end
 end
