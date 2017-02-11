@@ -11,11 +11,15 @@ gem "prezzo"
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install prezzo
+```
+$ gem install prezzo
+```
 
 ## Usage
 
