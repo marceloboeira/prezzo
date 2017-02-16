@@ -63,4 +63,14 @@ RSpec.describe "Uber Pricing" do
       end
     end
   end
+
+  context "when the contex is invalid" do
+    let(:ride_context) do
+      Uber::Context.new(category: "foo")
+    end
+
+    it "raises an invalid context error" do
+      expect { calculator }.to raise_error
+    end
+  end
 end
