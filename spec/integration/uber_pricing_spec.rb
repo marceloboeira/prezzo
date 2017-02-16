@@ -11,7 +11,7 @@ RSpec.describe "Uber Pricing" do
                       total_cars: 100,
                       available_cars: available_cars)
   end
-  let(:calculator) { Uber::RidePriceCalculator.new(ride_context) }
+  let(:calculator) { Uber::RidePrice.new(ride_context) }
   let(:price) { calculator.calculate }
 
   context "when the context is valid" do
