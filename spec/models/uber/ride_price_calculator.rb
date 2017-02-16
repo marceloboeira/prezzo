@@ -10,7 +10,6 @@ module Uber
 
     explain_with :base_fare, :price_per_distance, :surge_multiplier
 
-
     def calculate
       (base_fare + price_per_distance) * surge_multiplier
     end

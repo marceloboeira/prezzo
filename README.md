@@ -23,9 +23,45 @@ $ gem install prezzo
 
 ## Usage
 
+### Prezzo::Context
+
+
+The `Prezzo::Context` is a source of data for your calculators. Basically, it receives a hash of params and it validates its content, in order to make the calculations safe.
+
+e.g.:
+
+```ruby
+module Uber
+  class Context
+    include Prezzo::Context
+    CATEGORIES = ["UberX", "UberXL", "UberBlack"].freeze
+
+    validations do
+      required(:category).filled(included_in?: CATEGORIES)
+      required(:distance).filled(:float?)
+      required(:total_cars).filled(:int?)
+      required(:available_cars).filled(:int?)
+    end
+  end
+end
+
+context = Uber::Context.new(category: "UberBlack", ...)
+
+# when valid
+context.valid?
+#=> true
+
+# when invalid
+context.valid?
+#=> false
+
+context.errors
+# { distance: ["must be a float"]}
+```
+
 ### Prezzo::Calculator
 
-The `Prezzo::Calculator` is a simple interface for injecting dependencies on your calculators and calculating the price. Basically, it makes it possible to receive the context, an Hash of parameters containing the necessary information to calculate your price.
+The `Prezzo::Calculator` is a simple interface for injecting dependencies on your calculators and calculating the price. Basically, it makes it possible to receive the context, an Hash of parameters containing the necessary information to calculate your price or a Prezzo::Context.
 
 e.g.:
 
@@ -50,7 +86,8 @@ module Uber
   end
 end
 
-Uber::PricePerDistanceCalculator.new(distance: 10.0).calculate
+context = Uber::Context.new(distance: 10.0)
+Uber::PricePerDistanceCalculator.new(context).calculate
 #=> 20.0
 ```
 
@@ -77,7 +114,8 @@ module Uber
   end
 end
 
-Uber::RidePriceCalculator.new(distance: 10.0, category: "UberBlack", ...).calculate
+context = Uber::Context.new(distance: 10.0)
+Uber::RidePriceCalculator.new(context).calculate
 #=> 47.3
 ```
 
@@ -106,11 +144,9 @@ module Uber
   end
 end
 
-Uber::RidePriceCalculator.new(distance: 10.0, category: "UberBlack", ...).explain
-#=> {
- base_fare: 4.3,
- price_per_distance: 21.3
-}
+context = Uber::Context.new(distance: 10.0)
+Uber::RidePriceCalculator.new(context).explain
+#=> { base_fare: 4.3, price_per_distance: 21.3 }
 ```
 
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.

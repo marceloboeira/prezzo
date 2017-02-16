@@ -9,7 +9,7 @@ describe Prezzo::Explainable do
   let(:bar_calculator_class) do
     double(:calculator, new: bar_calculator_instance)
   end
-  let(:calculation_context) { { } }
+  let(:calculation_context) { {} }
   let(:calculator) { ExplainedCalculator.new(calculation_context) }
 
   before do
