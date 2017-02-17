@@ -5,7 +5,7 @@ module Prezzo
     end
 
     def calculate
-      0
+      raise "Calculate not implemented"
     end
 
     private

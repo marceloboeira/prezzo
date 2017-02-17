@@ -65,8 +65,8 @@ describe Prezzo::Calculator do
           end
         end
 
-        it "returns zero" do
-          expect(calculator.calculate).to eq(0)
+        it "raises an error" do
+          expect { calculator.calculate }.to raise_error("Calculate not implemented")
         end
       end
 
