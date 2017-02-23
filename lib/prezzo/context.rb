@@ -16,8 +16,8 @@ module Prezzo
       validation.errors
     end
 
-    def fetch(attribute)
-      attributes.fetch(attribute)
+    def fetch(*args)
+      attributes.fetch(*args)
     end
 
     def attributes

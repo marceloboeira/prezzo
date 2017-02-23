@@ -57,8 +57,16 @@ describe Prezzo::Context do
       end
 
       context "when the attribute is not valid" do
-        it "raises an error" do
-          expect { valid_context.fetch(:invalid) }.to raise_error(KeyError)
+        context "and there is a default value" do
+          it "returns the default value" do
+            expect(valid_context.fetch(:invalid, 23)).to be(23)
+          end
+        end
+
+        context "and there is no default value" do
+          it "raises an error" do
+            expect { valid_context.fetch(:invalid) }.to raise_error(KeyError)
+          end
         end
       end
     end
