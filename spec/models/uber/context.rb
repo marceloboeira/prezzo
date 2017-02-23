@@ -8,6 +8,7 @@ module Uber
       required(:distance).filled(:float?)
       required(:total_cars).filled(:int?)
       required(:available_cars).filled(:int?)
+      required(:price_per_kilometer).filled(:float?)
     end
   end
 end

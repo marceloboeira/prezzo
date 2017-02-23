@@ -8,7 +8,7 @@ module Uber
       end
 
       def price_per_kilometer
-        1.30
+        context.fetch(:price_per_kilometer)
       end
 
       def distance
