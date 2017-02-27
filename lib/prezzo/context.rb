@@ -16,8 +16,15 @@ module Prezzo
       validation.errors
     end
 
-    def fetch(*args)
-      attributes.fetch(*args)
+    def fetch(key, default = nil)
+      if default.nil?
+        value = attributes.fetch(key)
+      else
+        value = attributes.fetch(key, default)
+        value = default if value.nil?
+      end
+
+      value
     end
 
     def attributes
