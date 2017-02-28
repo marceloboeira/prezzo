@@ -25,7 +25,7 @@ RSpec.describe "Uber Pricing" do
             let(:available_cars) { 100 }
 
             it "returns the base fare for the UberX" do
-              expect(price).to be(4.0)
+              expect(price).to eq(4.0)
             end
           end
         end
@@ -37,7 +37,7 @@ RSpec.describe "Uber Pricing" do
             let(:available_cars) { 100 }
 
             it "adds the price per kilometer" do
-              expect(price.round(2)).to be(20.9)
+              expect(price.round(2)).to eq(20.9)
             end
           end
 
@@ -46,7 +46,7 @@ RSpec.describe "Uber Pricing" do
               let(:available_cars) { 40 }
 
               it "adds the additional per demand" do
-                expect(price.round(2)).to be(25.08)
+                expect(price.round(2)).to eq(25.08)
               end
             end
           end

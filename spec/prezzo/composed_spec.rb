@@ -42,14 +42,14 @@ describe Prezzo::Composed do
     end
 
     it "runs the calculators as methods" do
-      expect(calculator.foo).to be(10.0)
-      expect(calculator.bar).to be(15.3)
+      expect(calculator.foo).to eq(10.0)
+      expect(calculator.bar).to eq(15.3)
     end
   end
 
   describe "calculate" do
     it "returns the expected value" do
-      expect(calculator.calculate).to be(25.3)
+      expect(calculator.calculate).to eq(25.3)
     end
   end
 end

@@ -59,7 +59,7 @@ describe Prezzo::Context do
       context "when the attribute is nil" do
         context "and there is a default valud" do
           it "returns the default value" do
-            expect(valid_context.fetch(:nilable, 23)).to be(23)
+            expect(valid_context.fetch(:nilable, 23)).to eq(23)
           end
         end
 
@@ -73,7 +73,7 @@ describe Prezzo::Context do
       context "when the attribute is not valid" do
         context "and there is a default value" do
           it "returns the default value" do
-            expect(valid_context.fetch(:invalid, 23)).to be(23)
+            expect(valid_context.fetch(:invalid, 23)).to eq(23)
           end
         end
 
