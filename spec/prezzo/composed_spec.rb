@@ -27,6 +27,18 @@ describe Prezzo::Composed do
         foo + bar
       end
     end
+
+    class AnotherComposedCalculator
+      include Prezzo::Calculator
+      include Prezzo::Composed
+
+      composed_by foo: FooCalculator,
+                  far: BarCalculator
+
+      def calculate
+        boo + far
+      end
+    end
   end
 
   describe "internals" do
