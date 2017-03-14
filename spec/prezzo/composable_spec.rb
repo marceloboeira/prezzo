@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Prezzo::Composed do
+describe Prezzo::Composable do
   let(:foo_calculator_instance) { double(:calculator, calculate: 10.0) }
   let(:bar_calculator_instance) { double(:calculator, calculate: 15.3) }
   let(:foo_calculator_class) do
@@ -18,7 +18,7 @@ describe Prezzo::Composed do
 
     class ComposedCalculator
       include Prezzo::Calculator
-      include Prezzo::Composed
+      include Prezzo::Composable
 
       composed_by foo: FooCalculator,
                   bar: BarCalculator
@@ -30,7 +30,7 @@ describe Prezzo::Composed do
 
     class AnotherComposedCalculator
       include Prezzo::Calculator
-      include Prezzo::Composed
+      include Prezzo::Composable
 
       composed_by foo: FooCalculator,
                   far: BarCalculator

@@ -1,5 +1,5 @@
 module Prezzo
-  module Composed
+  module Composable
     def self.included(base)
       base.class_eval do
         base.extend(ClassMethods)

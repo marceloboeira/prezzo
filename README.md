@@ -95,9 +95,9 @@ Uber::PricePerDistanceCalculator.new(context).calculate
 
 If you initialize the context with a hash, it will skip the validation, however, any object that responds to `.valid?` will attempt a validation, and it will fail if valid? returns false.
 
-### Prezzo::Composed
+### Prezzo::Composable
 
-The `Prezzo::Composed` module is an abstraction that provides a nice way of injecting other calculators define how the price will be composed with all of those calculators.
+The `Prezzo::Composable` module is an abstraction that provides a nice way of injecting other calculators define how the price will be composed with all of those calculators.
 
 e.g.:
 
@@ -107,7 +107,7 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Composed
+    include Prezzo::Composable
 
     composed_by base_fare: BaseFareCalculator,
                 price_per_distance: PricePerDistanceCalculator,
@@ -135,7 +135,7 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Composed
+    include Prezzo::Composable
     include Prezzo::Explainable
 
     composed_by base_fare: BaseFareCalculator,

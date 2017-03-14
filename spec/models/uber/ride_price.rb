@@ -1,7 +1,7 @@
 module Uber
   class RidePrice
     include Prezzo::Calculator
-    include Prezzo::Composed
+    include Prezzo::Composable
     include Prezzo::Explainable
 
     composed_by base_fare: Calculators::BaseFare,
