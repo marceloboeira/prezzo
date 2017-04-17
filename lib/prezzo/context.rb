@@ -18,13 +18,10 @@ module Prezzo
 
     def fetch(key, default = nil)
       if default.nil?
-        value = attributes.fetch(key)
+        attributes.fetch(key)
       else
-        value = attributes.fetch(key, default)
-        value = default if value.nil?
+        attributes.fetch(key, default) || default
       end
-
-      value
     end
 
     def attributes
