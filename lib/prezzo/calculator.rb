@@ -10,15 +10,13 @@ module Prezzo
 
     private
 
+    attr_reader :context
+
     def validated!(context)
       raise "Empty Context" if context.nil?
       raise "Invalid Context" if context.respond_to?(:valid?) && !context.valid?
 
       context
-    end
-
-    def context
-      @context
     end
   end
 end
