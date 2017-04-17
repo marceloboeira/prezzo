@@ -8,7 +8,7 @@ class DefaultCalculator
   end
 end
 
-describe Prezzo::Calculator do
+RSpec.describe Prezzo::Calculator do
   describe "context validation" do
     let(:default_context) { nil }
     let(:calculator) { DefaultCalculator.new(default_context) }

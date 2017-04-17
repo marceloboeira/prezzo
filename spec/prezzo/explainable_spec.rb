@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Prezzo::Explainable do
+RSpec.describe Prezzo::Explainable do
   let(:foo_calculator_instance) { double(:calculator, calculate: 10.0) }
   let(:bar_calculator_instance) { double(:calculator, calculate: 15.3) }
   let(:foo_calculator_class) do

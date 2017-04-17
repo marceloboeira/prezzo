@@ -10,7 +10,7 @@ class FooContext
   end
 end
 
-describe Prezzo::Context do
+RSpec.describe Prezzo::Context do
   describe "validations" do
     context "when the data is valid" do
       let(:valid_context) do
