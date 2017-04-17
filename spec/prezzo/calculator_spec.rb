@@ -62,6 +62,8 @@ RSpec.describe Prezzo::Calculator do
         before do
           class FooCalculator
             include Prezzo::Calculator
+
+            remove_method :calculate
           end
         end
 
