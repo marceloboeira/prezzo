@@ -9,13 +9,9 @@ module Prezzo
     module ClassMethods
       def explain_with(*options)
         define_method(:explain) do
-          explanation = {}
-
-          options.each do |method|
+          options.each_with_object({}) do |method, explanation|
             explanation[method] = send(method)
           end
-
-          explanation
         end
       end
     end
