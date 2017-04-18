@@ -8,6 +8,18 @@ class DefaultCalculator
   end
 end
 
+class DefinedCalculator
+  include Prezzo::Calculator
+
+  def calculate
+    10
+  end
+end
+
+class UndefinedCalculator
+  include Prezzo::Calculator
+end
+
 RSpec.describe Prezzo::Calculator do
   describe "context validation" do
     let(:default_context) { nil }
@@ -56,16 +68,8 @@ RSpec.describe Prezzo::Calculator do
 
   describe "calculate" do
     context "when a class inherits from calculator" do
-      let(:calculator) { FooCalculator.new }
-
       context "and the calculate is not implemented" do
-        before do
-          class FooCalculator
-            include Prezzo::Calculator
-
-            remove_method :calculate
-          end
-        end
+        let(:calculator) { UndefinedCalculator.new }
 
         it "raises an error" do
           expect { calculator.calculate }.to raise_error("Calculate not implemented")
@@ -73,17 +77,9 @@ RSpec.describe Prezzo::Calculator do
       end
 
       context "and the calculate is implemented" do
+        let(:calculator) { DefinedCalculator.new }
+
         context "when there are not context options" do
-          before do
-            class FooCalculator
-              include Prezzo::Calculator
-
-              def calculate
-                10
-              end
-            end
-          end
-
           it "returns the expected value" do
             expect(calculator.calculate).to eq(10)
           end
