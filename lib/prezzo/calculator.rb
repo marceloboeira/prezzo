@@ -18,7 +18,7 @@ module Prezzo
 
         calculators.each do |name, klass|
           define_method(name) do
-            klass.new(context).calculate
+            @cache[name] ||= klass.new(context).calculate
           end
         end
       end
@@ -26,6 +26,7 @@ module Prezzo
 
     def initialize(context = {})
       @context = validated!(context)
+      @cache = {}
     end
 
     def calculate
