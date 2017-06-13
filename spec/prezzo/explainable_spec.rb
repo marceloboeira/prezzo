@@ -17,7 +17,6 @@ RSpec.describe Prezzo::Explainable do
 
     class ExplainedCalculator
       include Prezzo::Calculator
-      include Prezzo::Composable
       include Prezzo::Explainable
 
       composed_by foo: FooCalculator,

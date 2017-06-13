@@ -1,6 +1,7 @@
 module Uber
   class Context
     include Prezzo::Context
+
     CATEGORIES = ["UberX", "UberXL", "UberBlack"].freeze
 
     validations do

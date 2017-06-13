@@ -3,6 +3,8 @@ module Uber
     class BaseFare
       include Prezzo::Calculator
 
+      composed_by :category
+
       PRICE_PER_CATEGORY = {
         "UberX" => 4.0,
         "UberXL" => 6.0,
@@ -10,15 +12,7 @@ module Uber
       }.freeze
 
       def calculate
-        price_for(category) || 0
-      end
-
-      def category
-        context.fetch(:category)
-      end
-
-      def price_for(category)
-        PRICE_PER_CATEGORY[category]
+        PRICE_PER_CATEGORY.fetch(category, 0)
       end
     end
   end

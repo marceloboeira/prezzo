@@ -3,16 +3,11 @@ module Uber
     class PricePerDistance
       include Prezzo::Calculator
 
+      composed_by :price_per_kilometer,
+                  :distance
+
       def calculate
         price_per_kilometer * distance
-      end
-
-      def price_per_kilometer
-        context.fetch(:price_per_kilometer)
-      end
-
-      def distance
-        context.fetch(:distance)
       end
     end
   end

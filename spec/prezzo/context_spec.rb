@@ -2,6 +2,7 @@ require "spec_helper"
 
 class FooContext
   include Prezzo::Context
+
   CATEGORIES = ["Foo", "Bar"].freeze
 
   validations do
