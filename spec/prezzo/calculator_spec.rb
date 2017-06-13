@@ -1,13 +1,7 @@
 require "spec_helper"
 
-class DefaultCalculator
+class UndefinedCalculator
   include Prezzo::Calculator
-
-  composed_by :distance
-
-  def calculate
-    distance * 5
-  end
 end
 
 class DefinedCalculator
@@ -18,14 +12,20 @@ class DefinedCalculator
   end
 end
 
-class UndefinedCalculator
+class ContextCalculator
   include Prezzo::Calculator
+
+  composed_by :distance
+
+  def calculate
+    distance * 5
+  end
 end
 
 RSpec.describe Prezzo::Calculator do
   describe "context validation" do
-    let(:default_context) { nil }
-    let(:calculator) { DefaultCalculator.new(default_context) }
+    let(:context) { nil }
+    let(:calculator) { ContextCalculator.new(context) }
 
     context "when there is no context" do
       it "raises an error" do
@@ -34,7 +34,7 @@ RSpec.describe Prezzo::Calculator do
     end
 
     context "when the context does not respond to valid?" do
-      let(:default_context) { double(:context) }
+      let(:context) { double(:context) }
 
       it "does not raise error" do
         expect { calculator }.to_not raise_error("Empty Context")
@@ -43,7 +43,7 @@ RSpec.describe Prezzo::Calculator do
 
     context "when the context responds to valid?" do
       context "when the context is invalid" do
-        let(:default_context) { double(Prezzo::Context, valid?: false) }
+        let(:context) { double(Prezzo::Context, valid?: false) }
 
         it "raises an error" do
           expect { calculator }.to raise_error("Invalid Context")
@@ -51,14 +51,14 @@ RSpec.describe Prezzo::Calculator do
       end
 
       context "when the context is valid" do
-        let(:default_context) { double(Prezzo::Context, valid?: true) }
+        let(:context) { double(Prezzo::Context, valid?: true) }
 
         it "raises an error" do
           expect { calculator }.to_not raise_error("Invalid Context")
         end
 
         it "validates the context" do
-          expect(default_context).to receive(:valid?)
+          expect(context).to receive(:valid?)
 
           calculator
         end
@@ -66,27 +66,46 @@ RSpec.describe Prezzo::Calculator do
     end
   end
 
-  describe "calculate" do
-    context "when a class inherits from calculator" do
-      context "and calculate is not implemented" do
-        let(:calculator) { UndefinedCalculator.new }
+  describe "invalid calculator" do
+    let(:calculator) { UndefinedCalculator.new }
 
-        it "raises an error" do
-          expect { calculator.calculate }.to raise_error("Calculate not implemented")
-        end
-      end
-
-      context "and calculate is implemented" do
-        let(:calculator) { DefinedCalculator.new }
-
-        it "returns the expected value" do
-          expect(calculator.calculate).to eq(10)
-        end
-      end
+    it "raises an error" do
+      expect { calculator.calculate }.to raise_error("Calculate not implemented")
     end
   end
 
-  describe "composed_by" do
+  describe "simple calculator" do
+    let(:calculator) { DefinedCalculator.new }
+
+    it "calculates the correct value" do
+      expect(calculator.calculate).to eq(10)
+    end
+
+    it "explains with total only" do
+      expect(calculator.explain).to eq(
+        total: 10,
+      )
+    end
+  end
+
+  describe "calculator composed of context values" do
+    let(:calculator) { ContextCalculator.new(distance: 2) }
+
+    it "calculates the correct value" do
+      expect(calculator.calculate).to eq(10)
+    end
+
+    it "explains with total and context value" do
+      expect(calculator.explain).to eq(
+        total: 10,
+        components: {
+          distance: 2,
+        }
+      )
+    end
+  end
+
+  describe "calculator composed of a mix of context values and other calculators" do
     let(:foo_calculator_instance) { double(:calculator, calculate: 10.0) }
     let(:bar_calculator_instance) { double(:calculator, calculate: 15.3) }
     let(:foo_calculator_class) do
@@ -115,28 +134,47 @@ RSpec.describe Prezzo::Calculator do
       end
     end
 
-    it "declares methods for the calculators" do
-      expect(calculator.methods).to include(:foo, :bar)
+    context "results" do
+      it "calculates the correct value" do
+        expect(calculator.calculate).to eq(29.0)
+      end
+
+      it "explains with context values and composed calculators" do
+        expect(calculator.explain).to eq(
+          total: 29,
+          components: {
+            base_value: 3.7,
+            foo: 10.0,
+            bar: 15.3,
+          }
+        )
+      end
     end
 
-    it "declares methods for the context values" do
-      expect(calculator.methods).to include(:base_value)
-    end
+    context "internals" do
+      it "declares methods for the calculators" do
+        expect(calculator.methods).to include(:foo, :bar)
+      end
 
-    it "initializes the calculators with the context" do
-      expect(FooCalculator).to receive(:new).with(calculation_context)
-      expect(foo_calculator_instance).to receive(:calculate)
+      it "declares methods for the context values" do
+        expect(calculator.methods).to include(:base_value)
+      end
 
-      calculator.foo
-    end
+      it "initializes the calculators with the context" do
+        expect(FooCalculator).to receive(:new).with(calculation_context)
+        expect(foo_calculator_instance).to receive(:calculate)
 
-    it "runs the calculators as methods" do
-      expect(calculator.foo).to eq(10.0)
-      expect(calculator.bar).to eq(15.3)
-    end
+        calculator.foo
+      end
 
-    it "fetches the context value as a method" do
-      expect(calculator.base_value).to eq(3.7)
+      it "runs the calculators as methods" do
+        expect(calculator.foo).to eq(10.0)
+        expect(calculator.bar).to eq(15.3)
+      end
+
+      it "fetches the context value as a method" do
+        expect(calculator.base_value).to eq(3.7)
+      end
     end
   end
 end

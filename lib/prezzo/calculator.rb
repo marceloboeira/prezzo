@@ -12,7 +12,7 @@ module Prezzo
 
         args.each do |arg|
           define_method(arg) do
-            context.fetch(arg)
+            @cache[arg] ||= context.fetch(arg)
           end
         end
 
@@ -31,6 +31,21 @@ module Prezzo
 
     def calculate
       raise "Calculate not implemented"
+    end
+
+    def explain
+      explanation = {
+        total: calculate
+      }
+
+      components = @cache.reduce({}) do |acc, (name, value)|
+        acc[name] = value
+        acc
+      end
+
+      explanation[:components] = components unless components.empty?
+
+      explanation
     end
 
     private
