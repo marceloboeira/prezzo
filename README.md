@@ -109,7 +109,6 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Composable
 
     composed_by base_fare: BaseFareCalculator,
                 price_per_distance: PricePerDistanceCalculator,
@@ -125,9 +124,11 @@ Uber::RidePriceCalculator.new(context).calculate
 #=> 47.3
 ```
 
-### Prezzo::Explainable
+### Explanations
 
-The `Prezzo::Explainable` module is an abstraction that provides a nice way of representing how the price was composed.
+Calculators have an `explain` method that provides a nice representation of how
+the price was composed. Note that this will trigger all calculations if they
+haven't yet run.
 
 e.g.:
 
@@ -137,12 +138,9 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Composable
-    include Prezzo::Explainable
 
     composed_by base_fare: BaseFareCalculator,
                 price_per_distance: PricePerDistanceCalculator,
-    explain_with :base_fare, :price_per_distance
 
     def calculate
       base_fare + price_per_distance
@@ -152,7 +150,7 @@ end
 
 context = Uber::Context.new(distance: 10.0)
 Uber::RidePriceCalculator.new(context).explain
-#=> { base_fare: 4.3, price_per_distance: 21.3 }
+#=> { total: 25.6, components: { base_fare: 4.3, price_per_distance: 21.3 } }
 ```
 
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
