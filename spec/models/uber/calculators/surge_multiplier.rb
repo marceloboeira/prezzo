@@ -6,7 +6,7 @@ module Uber
       composed_by :total_cars,
                   :available_cars
 
-      def calculate
+      def formula
         1 + (1 - Math::log(available_cars, total_cars)).round(2)
       end
     end

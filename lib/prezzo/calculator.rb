@@ -30,7 +30,11 @@ module Prezzo
     end
 
     def calculate
-      raise "Calculate not implemented"
+      @result ||= formula
+    end
+
+    def formula
+      raise "Formula not implemented"
     end
 
     def explain

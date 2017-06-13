@@ -6,7 +6,7 @@ module Uber
                 price_per_distance: Calculators::PricePerDistance,
                 surge_multiplier: Calculators::SurgeMultiplier
 
-    def calculate
+    def formula
       (base_fare + price_per_distance) * surge_multiplier
     end
   end

@@ -6,7 +6,7 @@ module Uber
       composed_by :price_per_kilometer,
                   :distance
 
-      def calculate
+      def formula
         price_per_kilometer * distance
       end
     end

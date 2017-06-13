@@ -65,7 +65,9 @@ context.errors
 ### Prezzo::Calculator
 
 `Prezzo::Calculator` is how you take input values and compute the price. The
-`composed_by` dsl defines methods that read values from the context.
+`formula` method defines the formula, and the `composed_by` dsl defines methods
+that read values from the context. Call `calculate` to get the result of a
+calculator.
 
 e.g.:
 
@@ -79,7 +81,7 @@ module Uber
     composed_by :distance,
                 :price_per_kilometer
 
-    def calculate
+    def formula
       price_per_kilometer * distance
     end
   end
@@ -113,7 +115,7 @@ module Uber
     composed_by base_fare: BaseFareCalculator,
                 price_per_distance: PricePerDistanceCalculator,
 
-    def calculate
+    def formula
       base_fare + price_per_distance
     end
   end
@@ -142,7 +144,7 @@ module Uber
     composed_by base_fare: BaseFareCalculator,
                 price_per_distance: PricePerDistanceCalculator,
 
-    def calculate
+    def formula
       base_fare + price_per_distance
     end
   end
