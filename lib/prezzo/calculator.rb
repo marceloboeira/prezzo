@@ -12,13 +12,15 @@ module Prezzo
 
         args.each do |arg|
           define_method(arg) do
-            @cache[arg] ||= context.fetch(arg)
+            @inputs[arg] ||= context.fetch(arg)
           end
         end
 
         calculators.each do |name, klass|
           define_method(name) do
-            @cache[name] ||= klass.new(context).calculate
+            @components[name] ||= klass.new(context)
+
+            @components[name].calculate
           end
         end
       end
@@ -26,7 +28,8 @@ module Prezzo
 
     def initialize(context = {})
       @context = validated!(context)
-      @cache = {}
+      @components = {}
+      @inputs = {}
     end
 
     def calculate
@@ -42,12 +45,19 @@ module Prezzo
         total: calculate
       }
 
-      components = @cache.reduce({}) do |acc, (name, value)|
-        acc[name] = value
+      components = @components.reduce({}) do |acc, (name, component)|
+        acc[name] = component.explain
         acc
       end
 
       explanation[:components] = components unless components.empty?
+
+      inputs = @inputs.reduce({}) do |acc, (name, value)|
+        acc[name] = value
+        acc
+      end
+
+      explanation[:context] = inputs unless inputs.empty?
 
       explanation
     end

@@ -22,6 +22,32 @@ class ContextCalculator
   end
 end
 
+class FooCalculator
+  include Prezzo::Calculator
+
+  def formula
+    10
+  end
+end
+
+class NestedCalculator
+  include Prezzo::Calculator
+
+  def formula
+    15.3
+  end
+end
+
+class BarCalculator
+  include Prezzo::Calculator
+
+  composed_by nested: NestedCalculator
+
+  def formula
+    nested
+  end
+end
+
 RSpec.describe Prezzo::Calculator do
   describe "context validation" do
     let(:context) { nil }
@@ -98,7 +124,7 @@ RSpec.describe Prezzo::Calculator do
     it "explains with total and context value" do
       expect(calculator.explain).to eq(
         total: 10,
-        components: {
+        context: {
           distance: 2,
         }
       )
@@ -106,21 +132,10 @@ RSpec.describe Prezzo::Calculator do
   end
 
   describe "calculator composed of a mix of context values and other calculators" do
-    let(:foo_calculator_instance) { double(:calculator, calculate: 10.0) }
-    let(:bar_calculator_instance) { double(:calculator, calculate: 15.3) }
-    let(:foo_calculator_class) do
-      double(:calculator, new: foo_calculator_instance)
-    end
-    let(:bar_calculator_class) do
-      double(:calculator, new: bar_calculator_instance)
-    end
     let(:calculation_context) { { base_value: 3.7 } }
     let(:calculator) { ComposedCalculator.new(calculation_context) }
 
     before do
-      stub_const("FooCalculator", foo_calculator_class)
-      stub_const("BarCalculator", bar_calculator_class)
-
       class ComposedCalculator
         include Prezzo::Calculator
 
@@ -141,11 +156,22 @@ RSpec.describe Prezzo::Calculator do
 
       it "explains with context values and composed calculators" do
         expect(calculator.explain).to eq(
-          total: 29,
-          components: {
+          total: 29.0,
+          context: {
             base_value: 3.7,
-            foo: 10.0,
-            bar: 15.3,
+          },
+          components: {
+            foo: {
+              total: 10.0,
+            },
+            bar: {
+              total: 15.3,
+              components: {
+                nested: {
+                  total: 15.3,
+                }
+              }
+            },
           }
         )
       end
@@ -161,8 +187,7 @@ RSpec.describe Prezzo::Calculator do
       end
 
       it "initializes the calculators with the context" do
-        expect(FooCalculator).to receive(:new).with(calculation_context)
-        expect(foo_calculator_instance).to receive(:calculate)
+        expect(FooCalculator).to receive(:new).with(calculation_context).and_return(double(:calculator, calculate: 1))
 
         calculator.foo
       end
