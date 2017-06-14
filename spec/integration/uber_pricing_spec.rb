@@ -6,11 +6,16 @@ RSpec.describe "Uber Pricing" do
   let(:available_cars) { 30 }
   let(:category) { "UberX" }
   let(:ride_context) do
-    Uber::Context.new(category: category,
-                      distance: distance,
-                      total_cars: 100,
-                      price_per_kilometer: 1.3,
-                      available_cars: available_cars)
+    Uber::Context.new(
+      category: category,
+      distance: distance,
+      total_cars: 100,
+      price_per_kilometer: 1.3,
+      available_cars: available_cars,
+      origin: {
+        location_factor: 1.05,
+      },
+    )
   end
   let(:calculator) { Uber::RidePrice.new(ride_context) }
   let(:price) { calculator.calculate }
@@ -25,7 +30,7 @@ RSpec.describe "Uber Pricing" do
             let(:available_cars) { 100 }
 
             it "returns the base fare for the UberX" do
-              expect(price).to eq(4.0)
+              expect(price).to eq(4.2)
             end
           end
         end
@@ -37,7 +42,7 @@ RSpec.describe "Uber Pricing" do
             let(:available_cars) { 100 }
 
             it "adds the price per kilometer" do
-              expect(price.round(2)).to eq(20.9)
+              expect(price.round(2)).to eq(21.95)
             end
           end
 
@@ -46,7 +51,7 @@ RSpec.describe "Uber Pricing" do
               let(:available_cars) { 40 }
 
               it "adds the additional per demand" do
-                expect(price.round(2)).to eq(25.08)
+                expect(price.round(2)).to eq(26.33)
               end
             end
           end
@@ -57,7 +62,12 @@ RSpec.describe "Uber Pricing" do
     describe "explain" do
       it "returns a hash with all the explainable params" do
         expect(calculator.explain).to eq(
-          total: 21.42,
+          total: 22.49,
+          context: {
+            origin: {
+              location_factor: 1.05,
+            },
+          },
           components: {
             base_fare: {
               total: 4.0,
@@ -70,14 +80,14 @@ RSpec.describe "Uber Pricing" do
               context: {
                 price_per_kilometer: 1.3,
                 distance: 10,
-              }
+              },
             },
             surge_multiplier: {
               total: 1.26,
               context: {
                 total_cars: 100,
                 available_cars: 30,
-              }
+              },
             },
           }
         )

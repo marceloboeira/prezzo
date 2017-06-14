@@ -1,5 +1,26 @@
 module Prezzo
   module Calculator
+    class ContextWrapper
+      def initialize(context, *args)
+        @context = context
+        @args = args
+        @cache = {}
+      end
+
+      def method_missing(arg)
+        super unless @args.include?(arg)
+
+        @cache[arg] ||= @context.fetch(arg)
+      end
+
+      def explain
+        @cache.reduce({}) do |acc, (key, value)|
+          acc[key] = value
+          acc
+        end
+      end
+    end
+
     def self.included(base)
       base.class_eval do
         base.extend(ClassMethods)
@@ -16,11 +37,20 @@ module Prezzo
           end
         end
 
-        calculators.each do |name, klass|
-          define_method(name) do
-            @components[name] ||= klass.new(context)
+        calculators.each do |name, value|
+          case value
+          when Array
+            define_method(name) do
+              wrapper = ContextWrapper.new(context.fetch(name), *value)
+              @inputs[name] ||= wrapper
+            end
+          else
+            klass = value
+            define_method(name) do
+              @components[name] ||= klass.new(context)
 
-            @components[name].calculate
+              @components[name].calculate
+            end
           end
         end
       end
@@ -53,7 +83,12 @@ module Prezzo
       explanation[:components] = components unless components.empty?
 
       inputs = @inputs.reduce({}) do |acc, (name, value)|
-        acc[name] = value
+        if value.is_a?(ContextWrapper)
+          acc[name] = value.explain
+        else
+          acc[name] = value
+        end
+
         acc
       end
 
