@@ -1,6 +1,7 @@
 module Uber
   class Context
     include Prezzo::Context
+
     CATEGORIES = ["UberX", "UberXL", "UberBlack"].freeze
 
     validations do
@@ -9,6 +10,10 @@ module Uber
       required(:total_cars).filled(:int?)
       required(:available_cars).filled(:int?)
       required(:price_per_kilometer).filled(:float?)
+
+      required(:origin).schema do
+        required(:location_factor).filled(:float?)
+      end
     end
   end
 end

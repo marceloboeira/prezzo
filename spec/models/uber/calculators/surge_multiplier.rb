@@ -3,10 +3,10 @@ module Uber
     class SurgeMultiplier
       include Prezzo::Calculator
 
-      def calculate
-        total_cars = context.fetch(:total_cars)
-        available_cars = context.fetch(:available_cars)
+      composed_by :total_cars,
+                  :available_cars
 
+      def formula
         1 + (1 - Math::log(available_cars, total_cars)).round(2)
       end
     end
