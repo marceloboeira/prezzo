@@ -17,11 +17,10 @@ RSpec.describe Prezzo::Explainable do
 
     class ExplainedCalculator
       include Prezzo::Calculator
-      include Prezzo::Composable
       include Prezzo::Explainable
 
-      composed_by foo: FooCalculator,
-                  bar: BarCalculator
+      component :foo, FooCalculator
+      component :bar, BarCalculator
       explain_with :foo, :bar
 
       def calculate

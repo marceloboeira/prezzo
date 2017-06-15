@@ -1,5 +1,11 @@
 module Prezzo
   module Calculator
+    def self.included(base)
+      base.class_eval do
+        base.include(Composable)
+      end
+    end
+
     def initialize(context = {})
       @context = validated!(context)
     end

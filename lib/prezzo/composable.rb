@@ -7,15 +7,19 @@ module Prezzo
     end
 
     module ClassMethods
-      def composed_by(options)
-        options.each do |name, klass|
-          options[name] = klass
+      def component(name, klass)
+        define_method(name) do
+          components[name] ||= klass.new(context)
 
-          define_method(name) do
-            options[name].new(context).calculate
-          end
+          components[name].calculate
         end
       end
+    end
+
+    private
+
+    def components
+      @components ||= {}
     end
   end
 end

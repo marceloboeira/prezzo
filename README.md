@@ -95,9 +95,10 @@ Uber::PricePerDistanceCalculator.new(context).calculate
 
 If you initialize the context with a hash, it will skip the validation, however, any object that responds to `.valid?` will attempt a validation, and it will fail if valid? returns false.
 
-### Prezzo::Composable
+### Composing calculators
 
-The `Prezzo::Composable` module is an abstraction that provides a nice way of injecting other calculators define how the price will be composed with all of those calculators.
+Calculators provide the `component` dsl method to make it easy to compose
+calculators. Each component will be defined as a method in the calculator.
 
 e.g.:
 
@@ -107,10 +108,9 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Composable
 
-    composed_by base_fare: BaseFareCalculator,
-                price_per_distance: PricePerDistanceCalculator,
+    component :base_fare, BaseFareCalculator
+    component :price_per_distance, PricePerDistanceCalculator
 
     def calculate
       base_fare + price_per_distance
@@ -135,11 +135,10 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Composable
     include Prezzo::Explainable
 
-    composed_by base_fare: BaseFareCalculator,
-                price_per_distance: PricePerDistanceCalculator,
+    component :base_fare, BaseFareCalculator
+    component :price_per_distance, PricePerDistanceCalculator
     explain_with :base_fare, :price_per_distance
 
     def calculate
