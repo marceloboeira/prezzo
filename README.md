@@ -123,9 +123,11 @@ Uber::RidePriceCalculator.new(context).calculate
 #=> 47.3
 ```
 
-### Prezzo::Explainable
+### Explanations
 
-The `Prezzo::Explainable` module is an abstraction that provides a nice way of representing how the price was composed.
+The `explain` method provides a nice way of representing how the price was
+composed. Only components that are actually used on the calculation are
+included in the explanation.
 
 e.g.:
 
@@ -135,11 +137,9 @@ require "prezzo"
 module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
-    include Prezzo::Explainable
 
     component :base_fare, BaseFareCalculator
     component :price_per_distance, PricePerDistanceCalculator
-    explain_with :base_fare, :price_per_distance
 
     def calculate
       base_fare + price_per_distance
