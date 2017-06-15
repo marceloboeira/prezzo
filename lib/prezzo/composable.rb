@@ -9,17 +9,17 @@ module Prezzo
     module ClassMethods
       def component(name, klass)
         define_method(name) do
-          components[name] ||= klass.new(context)
+          cached_components[name] ||= klass.new(context)
 
-          components[name].calculate
+          cached_components[name].calculate
         end
       end
     end
 
     private
 
-    def components
-      @components ||= {}
+    def cached_components
+      @cached_components ||= {}
     end
   end
 end
