@@ -7,6 +7,12 @@ module Prezzo
     end
 
     module ClassMethods
+      def param(name)
+        define_method(name) do
+          context.fetch(name)
+        end
+      end
+
       def component(name, klass)
         define_method(name) do
           cached_components[name] ||= klass.new(context)

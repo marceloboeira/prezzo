@@ -26,7 +26,8 @@ $ gem install prezzo
 ### Prezzo::Context
 
 
-The `Prezzo::Context` is a source of data for your calculators. Basically, it receives a hash of params and it validates its content, in order to make the calculations safe.
+`Prezzo::Context` is a source of data for your calculators. It receives a hash
+of params and validates its content in order to make the calculations safe.
 
 e.g.:
 
@@ -61,7 +62,12 @@ context.errors
 
 ### Prezzo::Calculator
 
-The `Prezzo::Calculator` is a simple interface for injecting dependencies on your calculators and calculating the price. Basically, it makes it possible to receive the context, an Hash of parameters containing the necessary information to calculate your price or a Prezzo::Context.
+`Prezzo::Calculator` is a simple interface for injecting dependencies on
+your calculators and calculating the price. It makes it possible to
+receive a Context of parameters containing the necessary information
+to calculate your price and perform the calculations.
+
+Use the `param` dsl to create methods that read data from the context.
 
 e.g.:
 
@@ -72,28 +78,25 @@ module Uber
   class PricePerDistanceCalculator
     include Prezzo::Calculator
 
+    param :price_per_kilometer
+    param :distance
+
     def calculate
       price_per_kilometer * distance
-    end
-
-    def price_per_kilometer
-      1.30
-    end
-
-    def distance
-      context.fetch(:distance)
     end
   end
 end
 
-context = Uber::Context.new(distance: 10.0)
+context = Uber::Context.new(distance: 10.0, price_per_kilometer: 2)
 Uber::PricePerDistanceCalculator.new(context).calculate
 #=> 20.0
 ```
 
 **Context Validation**
 
-If you initialize the context with a hash, it will skip the validation, however, any object that responds to `.valid?` will attempt a validation, and it will fail if valid? returns false.
+If you initialize the calculator with a hash, it will skip the validation.
+However, any object that responds to `.valid?` will attempt a validation, and
+it will fail if valid? returns false.
 
 ### Composing calculators
 
@@ -147,9 +150,9 @@ module Uber
   end
 end
 
-context = Uber::Context.new(distance: 10.0)
+context = Uber::Context.new(distance: 10.0, ...)
 Uber::RidePriceCalculator.new(context).explain
-#=> { base_fare: 4.3, price_per_distance: 21.3 }
+#=> { total: 25, components: { base_fare: 4.3, price_per_distance: 21.3 } }
 ```
 
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
