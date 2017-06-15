@@ -2,6 +2,8 @@ require "hanami-validations"
 
 module Prezzo
   module Context
+    extend Forwardable
+
     def self.included(base)
       base.class_eval do
         base.include(Hanami::Validations)
@@ -16,19 +18,13 @@ module Prezzo
       validation.errors
     end
 
-    def fetch(key, default = nil)
-      if default.nil?
-        attributes.fetch(key)
-      else
-        attributes.fetch(key, default) || default
-      end
-    end
+    delegate fetch: :attributes
+
+    private
 
     def attributes
       validation.output
     end
-
-    private
 
     def validation
       @_validation ||= validate

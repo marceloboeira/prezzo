@@ -42,31 +42,13 @@ RSpec.describe Prezzo::Context do
 
   describe "attributes" do
     let(:valid_context) do
-      FooContext.new(category: "Foo", distance: 10.0, nilable: nil)
-    end
-
-    it "ouputs the attributes as hash" do
-      expect(valid_context.attributes).to include(:category, :distance)
+      FooContext.new(category: "Foo", distance: 10.0)
     end
 
     describe "fetch" do
       context "when the attribute is valid" do
         it "returns the attributes' value" do
           expect(valid_context.fetch(:category)).to eq("Foo")
-        end
-      end
-
-      context "when the attribute is nil" do
-        context "and there is a default valud" do
-          it "returns the default value" do
-            expect(valid_context.fetch(:nilable, 23)).to eq(23)
-          end
-        end
-
-        context "and there is not a default valud" do
-          it "returns nil" do
-            expect(valid_context.fetch(:nilable)).to be_nil
-          end
         end
       end
 
