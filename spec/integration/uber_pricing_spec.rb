@@ -6,11 +6,13 @@ RSpec.describe "Uber Pricing" do
   let(:available_cars) { 30 }
   let(:category) { "UberX" }
   let(:ride_context) do
-    Uber::Context.new(category: category,
-                      distance: distance,
-                      total_cars: 100,
-                      price_per_kilometer: 1.3,
-                      available_cars: available_cars)
+    {
+      category: category,
+      distance: distance,
+      total_cars: 100,
+      price_per_kilometer: 1.3,
+      available_cars: available_cars,
+    }
   end
   let(:calculator) { Uber::RidePrice.new(ride_context) }
   let(:price) { calculator.calculate }
