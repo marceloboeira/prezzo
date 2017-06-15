@@ -1,12 +1,11 @@
 module Uber
   class RidePrice
     include Prezzo::Calculator
-    include Prezzo::Composable
     include Prezzo::Explainable
 
-    composed_by base_fare: Calculators::BaseFare,
-                price_per_distance: Calculators::PricePerDistance,
-                surge_multiplier: Calculators::SurgeMultiplier
+    component :base_fare, Calculators::BaseFare
+    component :price_per_distance, Calculators::PricePerDistance
+    component :surge_multiplier, Calculators::SurgeMultiplier
 
     explain_with :base_fare, :price_per_distance, :surge_multiplier
 
