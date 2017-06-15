@@ -3,6 +3,7 @@ module Prezzo
     def self.included(base)
       base.class_eval do
         base.include(Composable)
+        base.include(Explainable)
       end
     end
 

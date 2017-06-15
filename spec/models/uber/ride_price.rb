@@ -7,8 +7,6 @@ module Uber
     component :price_per_distance, Calculators::PricePerDistance
     component :surge_multiplier, Calculators::SurgeMultiplier
 
-    explain_with :base_fare, :price_per_distance, :surge_multiplier
-
     def calculate
       (base_fare + price_per_distance) * surge_multiplier
     end
