@@ -129,8 +129,8 @@ Uber::RidePriceCalculator.new(context).calculate
 ### Explanations
 
 The `explain` method provides a nice way of representing how the price was
-composed. Only components that are actually used on the calculation are
-included in the explanation.
+composed. Only params and components that are actually used on the calculation
+are included in the explanation.
 
 e.g.:
 
@@ -141,18 +141,19 @@ module Uber
   class RidePriceCalculator
     include Prezzo::Calculator
 
+    param :value
     component :base_fare, BaseFareCalculator
     component :price_per_distance, PricePerDistanceCalculator
 
     def calculate
-      base_fare + price_per_distance
+      value + base_fare + price_per_distance
     end
   end
 end
 
-context = Uber::Context.new(distance: 10.0, ...)
+context = Uber::Context.new(distance: 10.0, value: 3, ...)
 Uber::RidePriceCalculator.new(context).explain
-#=> { total: 25, components: { base_fare: 4.3, price_per_distance: 21.3 } }
+#=> { total: 28, context: { value: 3 }, components: { base_fare: 4.3, price_per_distance: 21.3 } }
 ```
 
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
