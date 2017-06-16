@@ -81,7 +81,7 @@ module Uber
     param :price_per_kilometer
     param :distance
 
-    def calculate
+    def formula
       price_per_kilometer * distance
     end
   end
@@ -115,7 +115,7 @@ module Uber
     component :base_fare, BaseFareCalculator
     component :price_per_distance, PricePerDistanceCalculator
 
-    def calculate
+    def formula
       base_fare + price_per_distance
     end
   end
@@ -145,7 +145,7 @@ module Uber
     component :base_fare, BaseFareCalculator
     component :price_per_distance, PricePerDistanceCalculator
 
-    def calculate
+    def formula
       value + base_fare + price_per_distance
     end
   end

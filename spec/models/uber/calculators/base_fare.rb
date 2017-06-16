@@ -11,7 +11,7 @@ module Uber
         "UberBLACK" => 8.0,
       }.freeze
 
-      def calculate
+      def formula
         PRICE_PER_CATEGORY.fetch(category, 0)
       end
     end

@@ -6,7 +6,7 @@ module Uber
       param :price_per_kilometer
       param :distance
 
-      def calculate
+      def formula
         price_per_kilometer * distance
       end
     end

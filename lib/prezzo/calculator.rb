@@ -12,7 +12,11 @@ module Prezzo
     end
 
     def calculate
-      raise "Calculate not implemented"
+      @total ||= formula
+    end
+
+    def formula
+      raise "Formula not implemented"
     end
 
     private
