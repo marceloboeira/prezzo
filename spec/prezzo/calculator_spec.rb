@@ -3,7 +3,7 @@ require "spec_helper"
 class DefaultCalculator
   include Prezzo::Calculator
 
-  def calculate
+  def formula
     context.fetch(:distance, 0) * 5
   end
 end
@@ -11,7 +11,7 @@ end
 class DefinedCalculator
   include Prezzo::Calculator
 
-  def calculate
+  def formula
     10
   end
 end
@@ -72,7 +72,7 @@ RSpec.describe Prezzo::Calculator do
         let(:calculator) { UndefinedCalculator.new }
 
         it "raises an error" do
-          expect { calculator.calculate }.to raise_error("Calculate not implemented")
+          expect { calculator.calculate }.to raise_error("Formula not implemented")
         end
       end
 

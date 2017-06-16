@@ -3,7 +3,7 @@ require "spec_helper"
 class FooCalculator
   include Prezzo::Calculator
 
-  def calculate
+  def formula
     10.0
   end
 end
@@ -13,7 +13,7 @@ class BarCalculator
 
   param :bar_param
 
-  def calculate
+  def formula
     bar_param
   end
 end
@@ -25,7 +25,7 @@ class ComposedCalculator
   component :foo, FooCalculator
   component :bar, BarCalculator
 
-  def calculate
+  def formula
     foo + bar
   end
 end
