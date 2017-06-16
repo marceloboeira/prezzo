@@ -11,15 +11,17 @@ end
 class BarCalculator
   include Prezzo::Calculator
 
+  param :bar_param
+
   def calculate
-    15.3
+    bar_param
   end
 end
 
 class ComposedCalculator
   include Prezzo::Calculator
 
-  param :some_param
+  param :a_param
   component :foo, FooCalculator
   component :bar, BarCalculator
 
@@ -29,7 +31,7 @@ class ComposedCalculator
 end
 
 RSpec.describe Prezzo::Composable do
-  let(:context) { { some_param: 42.3 } }
+  let(:context) { { a_param: 42.3, bar_param: 15.3 } }
   let(:calculator) { ComposedCalculator.new(context) }
 
   describe "components" do
@@ -51,11 +53,11 @@ RSpec.describe Prezzo::Composable do
 
   describe "params" do
     it "declares methods for the params" do
-      expect(calculator.methods).to include(:some_param)
+      expect(calculator.methods).to include(:a_param)
     end
 
     it "reads the param from the context" do
-      expect(calculator.some_param).to eq(42.3)
+      expect(calculator.a_param).to eq(42.3)
     end
   end
 

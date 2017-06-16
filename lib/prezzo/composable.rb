@@ -9,7 +9,7 @@ module Prezzo
     module ClassMethods
       def param(name)
         define_method(name) do
-          context.fetch(name)
+          cached_params[name] ||= context.fetch(name)
         end
       end
 
@@ -26,6 +26,10 @@ module Prezzo
 
     def cached_components
       @cached_components ||= {}
+    end
+
+    def cached_params
+      @cached_params ||= {}
     end
   end
 end
