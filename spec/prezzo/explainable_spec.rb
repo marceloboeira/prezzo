@@ -47,5 +47,22 @@ RSpec.describe Prezzo::Explainable do
         )
       end
     end
+
+    context "when there are params components" do
+      let(:subject) { ParamAndComponentCalculator.new(context) }
+
+      it "includes total, context and components" do
+        expect(subject.explain).to eq(
+          total: 35.3,
+          context: {
+            a_param: 10,
+          },
+          components: {
+            foo: 10.0,
+            bar: 15.3,
+          },
+        )
+      end
+    end
   end
 end
