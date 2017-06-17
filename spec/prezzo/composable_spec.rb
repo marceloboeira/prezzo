@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe Prezzo::Composable do
-  let(:context) { { a_param: 42.3, bar_param: 15.3 } }
+  let(:context) { { a_param: 5, bar_param: 15.3 } }
   let(:calculator) { ParamAndComponentCalculator.new(context) }
 
   describe "components" do
@@ -27,13 +27,13 @@ RSpec.describe Prezzo::Composable do
     end
 
     it "reads the param from the context" do
-      expect(calculator.a_param).to eq(42.3)
+      expect(calculator.a_param).to eq(5)
     end
   end
 
   describe "calculate" do
     it "returns the expected value" do
-      expect(calculator.calculate).to eq(25.3)
+      expect(calculator.calculate).to eq(30.3)
     end
   end
 end

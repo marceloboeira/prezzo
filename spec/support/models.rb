@@ -16,6 +16,16 @@ class ParamCalculator
   end
 end
 
+class ComponentCalculator
+  include Prezzo::Calculator
+
+  component :foo, StaticCalculator
+
+  def formula
+    foo
+  end
+end
+
 class ParamAndComponentCalculator
   include Prezzo::Calculator
 
@@ -24,7 +34,7 @@ class ParamAndComponentCalculator
   component :bar, ParamCalculator
 
   def formula
-    foo + bar
+    a_param + foo + bar
   end
 end
 
