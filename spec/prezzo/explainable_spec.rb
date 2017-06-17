@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe Prezzo::Explainable do
   let(:context) { { a_param: 10, bar_param: 15.3 } }
-  let(:subject) { ComposedCalculator.new(context) }
+  let(:subject) { ParamAndComponentCalculator.new(context) }
 
   describe "internals" do
     it "declares the explanation method" do
@@ -12,7 +12,7 @@ RSpec.describe Prezzo::Explainable do
 
   describe "explain" do
     context "when there are no params and components" do
-      let(:subject) { FooCalculator.new(context) }
+      let(:subject) { StaticCalculator.new(context) }
 
       it "includes only total" do
         expect(subject.explain).to eq(
@@ -22,7 +22,7 @@ RSpec.describe Prezzo::Explainable do
     end
 
     context "when there are params" do
-      let(:subject) { BarCalculator.new(context) }
+      let(:subject) { ParamCalculator.new(context) }
 
       it "includes total and context" do
         expect(subject.explain).to eq(

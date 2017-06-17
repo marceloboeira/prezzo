@@ -1,4 +1,4 @@
-class FooCalculator
+class StaticCalculator
   include Prezzo::Calculator
 
   def formula
@@ -6,7 +6,7 @@ class FooCalculator
   end
 end
 
-class BarCalculator
+class ParamCalculator
   include Prezzo::Calculator
 
   param :bar_param
@@ -16,12 +16,12 @@ class BarCalculator
   end
 end
 
-class ComposedCalculator
+class ParamAndComponentCalculator
   include Prezzo::Calculator
 
   param :a_param
-  component :foo, FooCalculator
-  component :bar, BarCalculator
+  component :foo, StaticCalculator
+  component :bar, ParamCalculator
 
   def formula
     foo + bar

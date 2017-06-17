@@ -2,7 +2,7 @@ require "spec_helper"
 
 RSpec.describe Prezzo::Composable do
   let(:context) { { a_param: 42.3, bar_param: 15.3 } }
-  let(:calculator) { ComposedCalculator.new(context) }
+  let(:calculator) { ParamAndComponentCalculator.new(context) }
 
   describe "components" do
     it "declares methods for the calculators" do
@@ -10,7 +10,7 @@ RSpec.describe Prezzo::Composable do
     end
 
     it "initializes the calculators with the context" do
-      expect(FooCalculator).to receive(:new).with(context).and_call_original
+      expect(StaticCalculator).to receive(:new).with(context).and_call_original
 
       calculator.foo
     end
