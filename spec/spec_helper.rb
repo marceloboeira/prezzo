@@ -4,6 +4,8 @@ SimpleCov.start
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
 require "prezzo"
 
+require "support/models"
+
 RSpec.configure do |config|
   config.disable_monkey_patching!
   config.order = :random

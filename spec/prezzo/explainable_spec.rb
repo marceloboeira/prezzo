@@ -1,35 +1,5 @@
 require "spec_helper"
 
-class FooCalculator
-  include Prezzo::Calculator
-
-  def formula
-    10.0
-  end
-end
-
-class BarCalculator
-  include Prezzo::Calculator
-
-  param :bar_param
-
-  def formula
-    bar_param
-  end
-end
-
-class ComposedCalculator
-  include Prezzo::Calculator
-
-  param :a_param
-  component :foo, FooCalculator
-  component :bar, BarCalculator
-
-  def formula
-    foo + bar
-  end
-end
-
 RSpec.describe Prezzo::Explainable do
   let(:context) { { a_param: 10, bar_param: 15.3 } }
   let(:subject) { ComposedCalculator.new(context) }
