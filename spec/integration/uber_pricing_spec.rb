@@ -59,9 +59,26 @@ RSpec.describe "Uber Pricing" do
         expect(calculator.explain).to eq(
           total: 21.42,
           components: {
-            base_fare: 4.0,
-            price_per_distance: 13.0,
-            surge_multiplier: 1.26,
+            base_fare: {
+              total: 4.0,
+              context: {
+                category: "UberX",
+              },
+            },
+            price_per_distance: {
+              total: 13.0,
+              context: {
+                price_per_kilometer: 1.3,
+                distance: 10.0,
+              },
+            },
+            surge_multiplier: {
+              total: 1.26,
+              context: {
+                total_cars: 100,
+                available_cars: 30,
+              },
+            },
           },
         )
       end

@@ -6,7 +6,8 @@ module Prezzo
       }
 
       components = self.class.components&.reduce({}) do |acc, name|
-        acc[name] = public_send(name)
+        public_send(name) # force component cache
+        acc[name] = cached_components[name].explain
         acc
       end
       explanation[:components] = components unless components.nil? || components.empty?

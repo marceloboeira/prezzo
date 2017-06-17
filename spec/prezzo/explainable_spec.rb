@@ -58,7 +58,9 @@ RSpec.describe Prezzo::Explainable do
           expect(subject.explain).to eq(
             total: 10.0,
             components: {
-              foo: 10.0,
+              foo: {
+                total: 10.0,
+              },
             },
           )
         end
@@ -71,14 +73,16 @@ RSpec.describe Prezzo::Explainable do
           expect(subject.explain).to eq(
             total: 3,
             components: {
-              foo: 10.0,
+              foo: {
+                total: 10.0,
+              },
             },
           )
         end
       end
     end
 
-    context "when there are params components" do
+    context "when there are params and components" do
       let(:subject) { ParamAndComponentCalculator.new(context) }
 
       it "includes total, context and components" do
@@ -88,8 +92,35 @@ RSpec.describe Prezzo::Explainable do
             a_param: 10,
           },
           components: {
-            foo: 10.0,
-            bar: 15.3,
+            foo: {
+              total: 10.0,
+            },
+            bar: {
+              total: 15.3,
+              context: {
+                bar_param: 15.3,
+              },
+            },
+          },
+        )
+      end
+    end
+
+    context "nested calculators" do
+      let(:subject) { NestedCalculator.new(context) }
+
+      it "generates a nested explanation" do
+        expect(subject.explain).to eq(
+          total: 10.0,
+          components: {
+            inner: {
+              total: 10.0,
+              components: {
+                foo: {
+                  total: 10.0,
+                },
+              },
+            },
           },
         )
       end
