@@ -38,6 +38,16 @@ class ParamAndComponentCalculator
   end
 end
 
+class NestedCalculator
+  include Prezzo::Calculator
+
+  component :inner, ComponentCalculator
+
+  def formula
+    inner
+  end
+end
+
 class UnusedParamCalculator
   include Prezzo::Calculator
 
