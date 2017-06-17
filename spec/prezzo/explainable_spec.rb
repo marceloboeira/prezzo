@@ -23,28 +23,58 @@ RSpec.describe Prezzo::Explainable do
     end
 
     context "when there are params" do
-      let(:subject) { ParamCalculator.new(context) }
+      context "and they are used" do
+        let(:subject) { ParamCalculator.new(context) }
 
-      it "includes total and context" do
-        expect(subject.explain).to eq(
-          total: 15.3,
-          context: {
-            bar_param: 15.3,
-          },
-        )
+        it "includes total and context" do
+          expect(subject.explain).to eq(
+            total: 15.3,
+            context: {
+              bar_param: 15.3,
+            },
+          )
+        end
+      end
+
+      context "and they are not used" do
+        let(:subject) { UnusedParamCalculator.new(context) }
+
+        it "includes total and context" do
+          expect(subject.explain).to eq(
+            total: 3,
+            context: {
+              a_param: 10,
+            },
+          )
+        end
       end
     end
 
     context "when there are components" do
-      let(:subject) { ComponentCalculator.new(context) }
+      context "and they are used" do
+        let(:subject) { ComponentCalculator.new(context) }
 
-      it "includes total and components" do
-        expect(subject.explain).to eq(
-          total: 10.0,
-          components: {
-            foo: 10.0,
-          },
-        )
+        it "includes total and components" do
+          expect(subject.explain).to eq(
+            total: 10.0,
+            components: {
+              foo: 10.0,
+            },
+          )
+        end
+      end
+
+      context "and they are not used" do
+        let(:subject) { UnusedComponentCalculator.new(context) }
+
+        it "includes total and components" do
+          expect(subject.explain).to eq(
+            total: 3,
+            components: {
+              foo: 10.0,
+            },
+          )
+        end
       end
     end
 

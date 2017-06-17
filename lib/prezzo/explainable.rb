@@ -5,17 +5,17 @@ module Prezzo
         total: calculate,
       }
 
-      components = cached_components.reduce({}) do |acc, (name, component)|
-        acc[name] = component.calculate
+      components = self.class.components&.reduce({}) do |acc, name|
+        acc[name] = public_send(name)
         acc
       end
-      explanation[:components] = components unless components.empty?
+      explanation[:components] = components unless components.nil? || components.empty?
 
-      params = cached_params.reduce({}) do |acc, (name, value)|
-        acc[name] = value
+      context = self.class.params&.reduce({}) do |acc, name|
+        acc[name] = public_send(name)
         acc
       end
-      explanation[:context] = params unless params.empty?
+      explanation[:context] = context unless context.nil? || context.empty?
 
       explanation
     end

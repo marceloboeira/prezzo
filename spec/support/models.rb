@@ -38,3 +38,22 @@ class ParamAndComponentCalculator
   end
 end
 
+class UnusedParamCalculator
+  include Prezzo::Calculator
+
+  param :a_param
+
+  def formula
+    3
+  end
+end
+
+class UnusedComponentCalculator
+  include Prezzo::Calculator
+
+  component :foo, StaticCalculator
+
+  def formula
+    3
+  end
+end

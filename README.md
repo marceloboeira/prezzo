@@ -129,8 +129,7 @@ Uber::RidePriceCalculator.new(context).calculate
 ### Explanations
 
 The `explain` method provides a nice way of representing how the price was
-composed. Only params and components that are actually used on the calculation
-are included in the explanation.
+composed. It will include all params and components defined in the calculator.
 
 e.g.:
 

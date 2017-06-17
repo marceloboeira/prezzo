@@ -8,17 +8,31 @@ module Prezzo
 
     module ClassMethods
       def param(name)
+        @params ||= []
+        @params << name
+
         define_method(name) do
           cached_params[name] ||= context.fetch(name)
         end
       end
 
       def component(name, klass)
+        @components ||= []
+        @components << name
+
         define_method(name) do
           cached_components[name] ||= klass.new(context)
 
           cached_components[name].calculate
         end
+      end
+
+      def params
+        @params
+      end
+
+      def components
+        @components
       end
     end
 
