@@ -11,6 +11,9 @@ module Prezzo
       context = compile_params
       explanation[:context] = context unless context.nil? || context.empty?
 
+      transients = compile_transients
+      explanation[:transients] = transients unless transients.nil? || transients.empty?
+
       explanation
     end
   end

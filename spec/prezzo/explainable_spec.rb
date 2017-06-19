@@ -98,6 +98,19 @@ RSpec.describe Prezzo::Explainable do
       end
     end
 
+    context "when there are transients" do
+      let(:subject) { TransientCalculator.new(context) }
+
+      it "includes the transients" do
+        expect(subject.explain).to eq(
+          total: 5,
+          transients: {
+            intermediate_value: 5,
+          },
+        )
+      end
+    end
+
     context "nested calculators" do
       let(:subject) { NestedCalculator.new(context) }
 

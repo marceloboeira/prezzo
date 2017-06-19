@@ -101,3 +101,15 @@ class DefaultParamCalculator
     optional
   end
 end
+
+class TransientCalculator
+  include Prezzo::Calculator
+
+  transient :intermediate_value do
+    5
+  end
+
+  def formula
+    intermediate_value
+  end
+end
