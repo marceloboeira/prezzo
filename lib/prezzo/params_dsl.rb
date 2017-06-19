@@ -27,12 +27,24 @@ module Prezzo
     end
 
     def compile_params
-      self.class.params&.reduce({}) do |acc, name|
+      params = self.class.params&.reduce({}) do |acc, name|
         value = public_send(name)
         value = value.compile_params if value.respond_to?(:compile_params)
         acc[name] = value
         acc
       end
+
+      if @sub_context_name
+        {
+          @sub_context_name => params,
+        }
+      else
+        params
+      end
+    end
+
+    def sub_context(name)
+      @sub_context_name = name
     end
 
     private

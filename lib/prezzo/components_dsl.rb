@@ -7,12 +7,19 @@ module Prezzo
     end
 
     module ClassMethods
-      def component(name, klass)
+      def component(name, klass, sub_context_name = nil)
         @components ||= []
         @components << name
 
         define_method(name) do
-          cached_components[name] ||= klass.new(context)
+          cached_components[name] ||=
+            begin
+              c = sub_context_name ? context.fetch(sub_context_name) : context
+
+              instance = klass.new(c)
+              instance.sub_context(sub_context_name) if sub_context_name
+              instance
+            end
 
           cached_components[name].calculate
         end

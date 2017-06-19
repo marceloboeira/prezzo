@@ -19,5 +19,14 @@ RSpec.describe Prezzo::ComponentsDSL do
       expect(calculator.foo).to eq(10.0)
       expect(calculator.bar).to eq(15.3)
     end
+
+    context "with a restricted context" do
+      let(:context) { Prezzo::Context.new(bar_param: 1, restricted: { bar_param: 2 }) }
+      let(:calculator) { ComponentWithRestrictedContext.new(context) }
+
+      it "looks up values inside the restrited context" do
+        expect(calculator.calculate).to eq(2)
+      end
+    end
   end
 end

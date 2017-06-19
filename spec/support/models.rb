@@ -81,3 +81,13 @@ class NestedParamsCalculator
     level1.level2.level3
   end
 end
+
+class ComponentWithRestrictedContext
+  include Prezzo::Calculator
+
+  component :foo, ParamCalculator, :restricted
+
+  def formula
+    foo
+  end
+end
