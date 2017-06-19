@@ -8,8 +8,7 @@ module Prezzo
 
     module ClassMethods
       def param(name, options = {}, &block)
-        @params ||= []
-        @params << name
+        params << name
 
         define_method(name) do
           cached_params[name] ||=
@@ -22,12 +21,12 @@ module Prezzo
       end
 
       def params
-        @params
+        @params ||= []
       end
     end
 
     def compile_params
-      params = self.class.params&.reduce({}) do |acc, name|
+      params = self.class.params.reduce({}) do |acc, name|
         value = public_send(name)
         value = value.compile_params if value.respond_to?(:compile_params)
         acc[name] = value

@@ -6,13 +6,13 @@ module Prezzo
       }
 
       components = compile_components
-      explanation[:components] = components unless components.nil? || components.empty?
+      explanation[:components] = components unless components.empty?
 
       context = compile_params
-      explanation[:context] = context unless context.nil? || context.empty?
+      explanation[:context] = context unless context.empty?
 
       transients = compile_transients
-      explanation[:transients] = transients unless transients.nil? || transients.empty?
+      explanation[:transients] = transients unless transients.empty?
 
       explanation
     end

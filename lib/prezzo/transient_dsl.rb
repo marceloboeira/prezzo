@@ -8,8 +8,7 @@ module Prezzo
 
     module ClassMethods
       def transient(name)
-        @transients ||= []
-        @transients << name
+        transients << name
 
         define_method(name) do
           cached_transients[name] ||= yield
@@ -17,12 +16,12 @@ module Prezzo
       end
 
       def transients
-        @transients
+        @transients ||= []
       end
     end
 
     def compile_transients
-      self.class.transients&.reduce({}) do |acc, name|
+      self.class.transients.reduce({}) do |acc, name|
         public_send(name) # force transient cache
         acc[name] = cached_transients[name]
         acc
