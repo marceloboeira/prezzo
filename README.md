@@ -212,7 +212,34 @@ ExplainableCalculator.new(context).explain
 #=> { total: 33.0, context: { value: 3 }, components: { calculator1: { ... }, calculator2: { ... } } }
 ```
 
-Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
+### Transient values
+
+Intermediate calculation values that you would like to appear on the
+explanation can be defined with the `transient` dsl:
+
+```ruby
+require "prezzo"
+
+class TransientCalculator
+  include Prezzo::Calculator
+
+  param :arg1
+  param :arg2
+  param :arg3
+
+  transient :intermediate do
+    arg1 + arg2
+  end
+
+  def formula
+    arg3 * intermediate
+  end
+end
+
+context = Prezzo::Context.new(arg1: 1, arg2: 2, arg3: 3)
+TransientCalculator.new(context).explain
+#=> { total: 9, context: { arg1: 1, arg2: 2, arg3: 3 }, transients: { intermediate: 3 } }
+```
 
 ## Development
 

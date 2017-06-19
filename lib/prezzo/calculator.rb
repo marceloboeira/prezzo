@@ -4,6 +4,7 @@ module Prezzo
       base.class_eval do
         base.include(ParamsDSL)
         base.include(ComponentsDSL)
+        base.include(TransientDSL)
         base.include(Explainable)
       end
     end
