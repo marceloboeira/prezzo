@@ -82,6 +82,30 @@ Multiplier.new(context).calculate
 #=> 20.0
 ```
 
+### Default params
+
+The `param` dsl accepts a default value:
+
+e.g.:
+
+```ruby
+require "prezzo"
+
+class OptionalCalculator
+  include Prezzo::Calculator
+
+  param :optional, default: 10.0
+
+  def formula
+    optional * 3
+  end
+end
+
+context = Prezzo::Context.new(arg1: 2, arg2: 10.0)
+OptionalCalculator.new(context).calculate
+#=> 30.0
+```
+
 ### Nested context params
 
 The `param` dsl can take a block to access nested data in the context.

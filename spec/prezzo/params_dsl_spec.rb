@@ -14,6 +14,26 @@ RSpec.describe Prezzo::ParamsDSL do
     end
   end
 
+  describe "optional param" do
+    let(:calculator) { DefaultParamCalculator.new(context) }
+
+    context "when param is defined" do
+      let(:context) { Prezzo::Context.new(optional: 3) }
+
+      it "reads the param" do
+        expect(calculator.calculate).to eq(3)
+      end
+    end
+
+    context "when param is not defined" do
+      let(:context) { Prezzo::Context.new(other: 4) }
+
+      it "reads the default" do
+        expect(calculator.calculate).to eq(1.2)
+      end
+    end
+  end
+
   describe "nested params" do
     let(:context) { Prezzo::Context.new(level1: { level2: { level3: 3 } }) }
     let(:calculator) { NestedParamsCalculator.new(context) }
