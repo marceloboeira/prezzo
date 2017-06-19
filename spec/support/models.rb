@@ -67,3 +67,17 @@ class UnusedComponentCalculator
     3
   end
 end
+
+class NestedParamsCalculator
+  include Prezzo::Calculator
+
+  param :level1 do
+    param :level2 do
+      param :level3
+    end
+  end
+
+  def formula
+    level1.level2.level3
+  end
+end

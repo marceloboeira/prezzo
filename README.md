@@ -23,49 +23,41 @@ $ gem install prezzo
 
 ## Usage
 
-### Prezzo::Context
-
+### The calculation context
 
 `Prezzo::Context` is a source of data for your calculators. It receives a hash
-of params and validates its content in order to make the calculations safe.
+of params and makes them available to calculators.
 
 e.g.:
 
 ```ruby
-module Uber
-  class Context
-    include Prezzo::Context
-    CATEGORIES = ["UberX", "UberXL", "UberBlack"].freeze
+context = Prezzo::Context.new(category: "Expensive", distance: 10.0)
+```
 
-    validations do
-      required(:category).filled(included_in?: CATEGORIES)
-      required(:distance).filled(:float?)
-      required(:total_cars).filled(:int?)
-      required(:available_cars).filled(:int?)
-    end
+### Simple calculators
+
+`Prezzo::Calculator` is the top level concept to describe calculations. Define
+a `formula` method that describe the calculation you want to perform and call
+the `calculate` method.
+
+e.g.:
+
+```ruby
+require "prezzo"
+
+class StaticCalculator
+  include Prezzo::Calculator
+
+  def formula
+    2 * 5
   end
 end
 
-context = Uber::Context.new(category: "UberBlack", ...)
-
-# when valid
-context.valid?
-#=> true
-
-# when invalid
-context.valid?
-#=> false
-
-context.errors
-# { distance: ["must be a float"]}
+StaticCalculator.new.calculate
+#=> 10
 ```
 
-### Prezzo::Calculator
-
-`Prezzo::Calculator` is a simple interface for injecting dependencies on
-your calculators and calculating the price. It makes it possible to
-receive a Context of parameters containing the necessary information
-to calculate your price and perform the calculations.
+### Accessing context params
 
 Use the `param` dsl to create methods that read data from the context.
 
@@ -74,56 +66,73 @@ e.g.:
 ```ruby
 require "prezzo"
 
-module Uber
-  class PricePerDistanceCalculator
-    include Prezzo::Calculator
+class Multiplier
+  include Prezzo::Calculator
 
-    param :price_per_kilometer
-    param :distance
+  param :arg1
+  param :arg2
 
-    def formula
-      price_per_kilometer * distance
-    end
+  def formula
+    arg1 * arg2
   end
 end
 
-context = Uber::Context.new(distance: 10.0, price_per_kilometer: 2)
-Uber::PricePerDistanceCalculator.new(context).calculate
+context = Prezzo::Context.new(arg1: 2, arg2: 10.0)
+Multiplier.new(context).calculate
 #=> 20.0
 ```
 
-**Context Validation**
+### Nested context params
 
-If you initialize the calculator with a hash, it will skip the validation.
-However, any object that responds to `.valid?` will attempt a validation, and
-it will fail if valid? returns false.
-
-### Composing calculators
-
-Calculators provide the `component` dsl method to make it easy to compose
-calculators. Each component will be defined as a method in the calculator.
+The `param` dsl can take a block to access nested data in the context.
 
 e.g.:
 
 ```ruby
 require "prezzo"
 
-module Uber
-  class RidePriceCalculator
-    include Prezzo::Calculator
+class NestedCalculator
+  include Prezzo::Calculator
 
-    component :base_fare, BaseFareCalculator
-    component :price_per_distance, PricePerDistanceCalculator
+  param :level1 do
+    param :level2
+  end
 
-    def formula
-      base_fare + price_per_distance
-    end
+  def formula
+    level1.level2 * 2
   end
 end
 
-context = Uber::Context.new(distance: 10.0)
-Uber::RidePriceCalculator.new(context).calculate
-#=> 47.3
+context = Prezzo::Context.new(level1: { level2: 10.0 })
+NestedCalculator.new(context).calculate
+#=> 20.0
+```
+
+### Composing calculators
+
+Calculators provide the `component` dsl method to make it easy to compose
+calculators. Each calculator will be defined as a method in the calculator.
+They will receive the whole context on instantiation.
+
+e.g.:
+
+```ruby
+require "prezzo"
+
+class ComposedCalculator
+  include Prezzo::Calculator
+
+  component :calculator1, StaticCalculator
+  component :calculator2, Multiplier
+
+  def formula
+    calculator1 + calculator2
+  end
+end
+
+context = Prezzo::Context.new(arg1: 2, arg2: 10.0)
+ComposedCalculator.new(context).calculate
+#=> 30.0
 ```
 
 ### Explanations
@@ -136,23 +145,21 @@ e.g.:
 ```ruby
 require "prezzo"
 
-module Uber
-  class RidePriceCalculator
-    include Prezzo::Calculator
+class ExplainableCalculator
+  include Prezzo::Calculator
 
-    param :value
-    component :base_fare, BaseFareCalculator
-    component :price_per_distance, PricePerDistanceCalculator
+  param :value
+  component :calculator1, StaticCalculator
+  component :calculator2, Multiplier
 
-    def formula
-      value + base_fare + price_per_distance
-    end
+  def formula
+    value + calculator1 + calculator2
   end
 end
 
-context = Uber::Context.new(distance: 10.0, value: 3, ...)
-Uber::RidePriceCalculator.new(context).explain
-#=> { total: 28, context: { value: 3 }, components: { base_fare: 4.3, price_per_distance: 21.3 } }
+context = Prezzo::Context.new(value: 3, arg1: 2, arg2: 10.0)
+ExplainableCalculator.new(context).explain
+#=> { total: 33.0, context: { value: 3 }, components: { calculator1: { ... }, calculator2: { ... } } }
 ```
 
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
