@@ -91,3 +91,13 @@ class ComponentWithRestrictedContext
     foo
   end
 end
+
+class DefaultParamCalculator
+  include Prezzo::Calculator
+
+  param :optional, default: 1.2
+
+  def formula
+    optional
+  end
+end

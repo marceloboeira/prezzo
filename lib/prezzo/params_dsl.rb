@@ -7,14 +7,14 @@ module Prezzo
     end
 
     module ClassMethods
-      def param(name, &block)
+      def param(name, options = {}, &block)
         @params ||= []
         @params << name
 
         define_method(name) do
           cached_params[name] ||=
             begin
-              value = context.fetch(name)
+              value = context.fetch(name, options[:default])
               value.class.class_eval(&block) if block
               value
             end
