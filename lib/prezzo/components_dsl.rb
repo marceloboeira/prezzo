@@ -1,5 +1,5 @@
 module Prezzo
-  module Composable
+  module ComponentsDSL
     def self.included(base)
       base.class_eval do
         base.extend(ClassMethods)
@@ -7,15 +7,6 @@ module Prezzo
     end
 
     module ClassMethods
-      def param(name)
-        @params ||= []
-        @params << name
-
-        define_method(name) do
-          cached_params[name] ||= context.fetch(name)
-        end
-      end
-
       def component(name, klass)
         @components ||= []
         @components << name
@@ -27,12 +18,16 @@ module Prezzo
         end
       end
 
-      def params
-        @params
-      end
-
       def components
         @components
+      end
+    end
+
+    def compile_components
+      self.class.components&.reduce({}) do |acc, name|
+        public_send(name) # force component cache
+        acc[name] = cached_components[name].explain
+        acc
       end
     end
 
@@ -40,10 +35,6 @@ module Prezzo
 
     def cached_components
       @cached_components ||= {}
-    end
-
-    def cached_params
-      @cached_params ||= {}
     end
   end
 end

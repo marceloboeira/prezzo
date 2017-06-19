@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe Prezzo::Explainable do
-  let(:context) { { a_param: 10, bar_param: 15.3 } }
+  let(:context) { Prezzo::Context.new(a_param: 10, bar_param: 15.3) }
 
   describe "internals" do
     let(:subject) { ParamAndComponentCalculator.new(context) }
@@ -119,6 +119,24 @@ RSpec.describe Prezzo::Explainable do
                 foo: {
                   total: 10.0,
                 },
+              },
+            },
+          },
+        )
+      end
+    end
+
+    context "nexted params" do
+      let(:context) { Prezzo::Context.new(level1: { level2: { level3: 3 } }) }
+      let(:subject) { NestedParamsCalculator.new(context) }
+
+      it "includes a nested context in the explanation" do
+        expect(subject.explain).to eq(
+          total: 3,
+          context: {
+            level1: {
+              level2: {
+                level3: 3,
               },
             },
           },
