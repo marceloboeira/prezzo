@@ -8,8 +8,7 @@ module Prezzo
 
     module ClassMethods
       def component(name, klass, sub_context_name = nil)
-        @components ||= []
-        @components << name
+        components << name
 
         define_method(name) do
           cached_components[name] ||=
@@ -26,12 +25,12 @@ module Prezzo
       end
 
       def components
-        @components
+        @components ||= []
       end
     end
 
     def compile_components
-      self.class.components&.reduce({}) do |acc, name|
+      self.class.components.reduce({}) do |acc, name|
         public_send(name) # force component cache
         acc[name] = cached_components[name].explain
         acc
