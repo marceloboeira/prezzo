@@ -3,14 +3,6 @@ require "spec_helper"
 RSpec.describe Prezzo::Explainable do
   let(:context) { Prezzo::Context.new(a_param: 10, bar_param: 15.3) }
 
-  describe "internals" do
-    let(:subject) { ParamAndComponentCalculator.new(context) }
-
-    it "declares the explanation method" do
-      expect(subject.methods).to include(:explain)
-    end
-  end
-
   describe "explain" do
     context "when there are no params and components" do
       let(:subject) { StaticCalculator.new(context) }
@@ -118,6 +110,27 @@ RSpec.describe Prezzo::Explainable do
               components: {
                 foo: {
                   total: 10.0,
+                },
+              },
+            },
+          },
+        )
+      end
+    end
+
+    context "when there are restricted context components" do
+      let(:context) { Prezzo::Context.new(restricted: { bar_param: 10 }) }
+      let(:subject) { ComponentWithRestrictedContext.new(context) }
+
+      it "includes the restricted context name in the explanation" do
+        expect(subject.explain).to eq(
+          total: 10,
+          components: {
+            foo: {
+              total: 10,
+              context: {
+                restricted: {
+                  bar_param: 10,
                 },
               },
             },

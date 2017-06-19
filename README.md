@@ -135,6 +135,32 @@ ComposedCalculator.new(context).calculate
 #=> 30.0
 ```
 
+### Restricting the context
+
+You can restrict the context of each calculator by providing a third argument
+to `components`:
+
+e.g.:
+
+```ruby
+require "prezzo"
+
+class RestrictedCalculator
+  include Prezzo::Calculator
+
+  component :calculator1, Multiplier, :side1
+  component :calculator2, Multiplier, :side2
+
+  def formula
+    calculator1 + calculator2
+  end
+end
+
+context = Prezzo::Context.new(side1: { arg1: 2, arg2: 10.0 }, side2: { arg1: 3, arg2: 20.0 })
+RestrictedCalculator.new(context).calculate
+#=> 80.0
+```
+
 ### Explanations
 
 The `explain` method provides a nice way of representing how the price was
