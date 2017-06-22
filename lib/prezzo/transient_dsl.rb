@@ -7,11 +7,11 @@ module Prezzo
     end
 
     module ClassMethods
-      def transient(name)
+      def transient(name, &block)
         transients << name
 
         define_method(name) do
-          cached_transients[name] ||= yield
+          cached_transients[name] ||= self.instance_eval(&block)
         end
       end
 

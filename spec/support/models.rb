@@ -106,10 +106,16 @@ class TransientCalculator
   include Prezzo::Calculator
 
   transient :intermediate_value do
-    5
+    private_method
   end
 
   def formula
     intermediate_value
+  end
+
+  private
+
+  def private_method
+    5
   end
 end
