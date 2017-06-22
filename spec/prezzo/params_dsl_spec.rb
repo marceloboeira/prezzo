@@ -14,7 +14,7 @@ RSpec.describe Prezzo::ParamsDSL do
     end
   end
 
-  describe "optional param" do
+  describe "param with default" do
     let(:calculator) { DefaultParamCalculator.new(context) }
 
     context "when param is defined" do
@@ -22,6 +22,14 @@ RSpec.describe Prezzo::ParamsDSL do
 
       it "reads the param" do
         expect(calculator.calculate).to eq(3)
+      end
+    end
+
+    context "when param is defined but is nil" do
+      let(:context) { Prezzo::Context.new(optional: nil) }
+
+      it "reads the default" do
+        expect(calculator.calculate).to eq(1.2)
       end
     end
 

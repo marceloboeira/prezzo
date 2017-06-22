@@ -7,7 +7,7 @@ module Prezzo
     end
 
     def fetch(key, default = nil)
-      value = @attributes.fetch(key, default)
+      value = @attributes.fetch(key, default) || default
 
       if value.is_a?(Hash)
         Class.new(Context).new(value)
