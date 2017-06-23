@@ -50,7 +50,14 @@ RSpec.describe Prezzo::Explainable do
 
   describe "explain" do
     it "returns the expected value" do
-      expect(subject.explain).to eq(foo: 10.0, bar: 15.3, other: 5)
+      expect(subject.explain).to eq(
+        total: 25.3,
+        components: {
+          foo: 10.0,
+          bar: 15.3,
+          other: 5,
+        },
+      )
     end
   end
 end

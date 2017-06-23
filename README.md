@@ -150,7 +150,7 @@ end
 
 context = Uber::Context.new(distance: 10.0)
 Uber::RidePriceCalculator.new(context).explain
-#=> { base_fare: 4.3, price_per_distance: 21.3 }
+#=> { total: 25.6, components: { base_fare: 4.3, price_per_distance: 21.3 } }
 ```
 
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.

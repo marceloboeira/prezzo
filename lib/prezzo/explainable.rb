@@ -7,11 +7,19 @@ module Prezzo
     end
 
     module ClassMethods
-      def explain_with(*options)
+      def explain_with(*methods)
         define_method(:explain) do
-          options.each_with_object({}) do |method, explanation|
-            explanation[method] = send(method)
+          explanation = {
+            total: calculate,
+          }
+
+          components = methods.each_with_object({}) do |method, acc|
+            acc[method] = send(method)
           end
+
+          explanation[:components] = components unless components.empty?
+
+          explanation
         end
       end
     end

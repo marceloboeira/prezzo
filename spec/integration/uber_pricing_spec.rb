@@ -57,9 +57,12 @@ RSpec.describe "Uber Pricing" do
     describe "explain" do
       it "returns a hash with all the explainable params" do
         expect(calculator.explain).to eq(
-          base_fare: 4.0,
-          price_per_distance: 13.0,
-          surge_multiplier: 1.26,
+          total: 21.42,
+          components: {
+            base_fare: 4.0,
+            price_per_distance: 13.0,
+            surge_multiplier: 1.26,
+          },
         )
       end
     end
