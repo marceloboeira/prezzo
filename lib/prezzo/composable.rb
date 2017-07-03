@@ -9,10 +9,8 @@ module Prezzo
     module ClassMethods
       def composed_by(options)
         options.each do |name, klass|
-          options[name] = klass
-
           define_method(name) do
-            options[name].new(context).calculate
+            klass.new(context).calculate
           end
         end
       end
