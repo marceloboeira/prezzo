@@ -12,12 +12,17 @@ RSpec.describe Prezzo::Explainable do
 
     class BarCalculator
       include Prezzo::Calculator
+      include Prezzo::Composable
+      include Prezzo::Explainable
+
+      composed_by foo: FooCalculator
+
+      explain_with :foo
 
       def calculate
-        15.3
+        foo + 5.3
       end
     end
-
     class ExplainedCalculator
       include Prezzo::Calculator
       include Prezzo::Composable
@@ -54,7 +59,12 @@ RSpec.describe Prezzo::Explainable do
         total: 25.3,
         components: {
           foo: 10.0,
-          bar: 15.3,
+          bar: {
+            total: 15.3,
+            components: {
+              foo: 10.0,
+            },
+          },
           other: 5,
         },
       )
