@@ -56,20 +56,48 @@ RSpec.describe Prezzo::Explainable do
   end
 
   describe "explain" do
-    it "returns the expected value" do
-      expect(subject.explain).to eq(
-        total: 25.3,
-        components: {
-          foo: 10.0,
-          bar: {
-            total: 15.3,
-            components: {
-              foo: 10.0,
+    context "when resursive is not given" do
+      before do
+        class ExplainedCalculator
+          explain_with :foo, :bar
+          explain_with :other
+        end
+      end
+
+      it "returns the expected value" do
+        expect(subject.explain).to eq(
+          total: 25.3,
+          components: {
+            foo: 10.0,
+            bar: {
+              total: 15.3,
+              components: {
+                foo: 10.0,
+              },
             },
+            other: 5,
           },
-          other: 5,
-        },
-      )
+        )
+      end
+    end
+
+    context "when resursive = false is given" do
+      before do
+        class ExplainedCalculator
+          explain_with :foo, :bar, :other, resursive: false
+        end
+      end
+
+      it "returns the expected value" do
+        expect(subject.explain).to eq(
+          total: 25.3,
+          components: {
+            foo: 10.0,
+            bar: 15.3,
+            other: 5,
+          },
+        )
+      end
     end
   end
 end
