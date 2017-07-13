@@ -153,6 +153,84 @@ Uber::RidePriceCalculator.new(context).explain
 #=> { total: 25.6, components: { base_fare: 4.3, price_per_distance: 21.3 } }
 ```
 
+#### Multiline `explain_with`
+
+`explain_with` can be splitted into several lines.
+
+```ruby
+class RidePriceCalculator
+  include Prezzo::Explainable
+
+  explain_with :base_fare
+  explain_with :price_per_distance
+end
+```
+
+#### ` explain_with` with the `resursive: false` option
+
+```ruby
+class FooCalculator
+  include Prezzo::Calculator
+  include Prezzo::Explainable
+
+  explain_with :bar, :baz
+
+  def calculate
+    bar + baz
+  end
+
+  def bar
+    10
+  end
+
+  def baz
+    20
+  end
+end
+
+class QuxCalculator
+  include Prezzo::Calculator
+  include Prezzo::Composable
+  include Prezzo::Explainable
+
+  composed_by foo: FooCalculator
+
+  explain_with :foo, resursive: false
+
+  def calculate
+    foo + 5
+  end
+end
+```
+
+`QuxCalculator#explain` now produces
+
+```ruby
+{
+  total: 35,
+  components: {
+    foo: 30
+  }
+}
+```
+
+but not
+
+```ruby
+{
+  total: 35,
+  components: {
+    foo: {
+      total: 30,
+      components: {
+        bar: 10,
+        baz: 20
+      }
+    }
+  }
+}
+```
+
 Check the full [Uber pricing](/spec/integration/uber_pricing_spec.rb) for more complete example with many calculators and factors.
 
 ## Development
