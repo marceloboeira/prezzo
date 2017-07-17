@@ -56,7 +56,7 @@ RSpec.describe Prezzo::Explainable do
   end
 
   describe "explain" do
-    context "when resursive is not given" do
+    context "when recursive is not given" do
       before do
         class ExplainedCalculator
           explain_with :foo, :bar
@@ -81,10 +81,10 @@ RSpec.describe Prezzo::Explainable do
       end
     end
 
-    context "when resursive = false is given" do
+    context "when recursive = false is given" do
       before do
         class ExplainedCalculator
-          explain_with :foo, :bar, :other, resursive: false
+          explain_with :foo, :bar, :other, recursive: false
         end
       end
 
