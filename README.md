@@ -166,7 +166,7 @@ class RidePriceCalculator
 end
 ```
 
-#### ` explain_with` with the `resursive: false` option
+#### ` explain_with` with the `recursive: false` option
 
 ```ruby
 class FooCalculator
@@ -195,7 +195,7 @@ class QuxCalculator
 
   composed_by foo: FooCalculator
 
-  explain_with :foo, resursive: false
+  explain_with :foo, recursive: false
 
   def calculate
     foo + 5

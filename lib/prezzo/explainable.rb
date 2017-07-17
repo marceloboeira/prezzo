@@ -30,7 +30,7 @@ module Prezzo
         if self.class.respond_to?(:components) && self.class.components.include?(component)
           value = cached_components[component]
         end
-        value = value.explain if value.respond_to?(:explain) && options.fetch(:resursive, true)
+        value = value.explain if value.respond_to?(:explain) && options.fetch(:recursive, true)
         value = value.calculate if value.respond_to?(:calculate)
         explanation[:components][component] = value
       end
